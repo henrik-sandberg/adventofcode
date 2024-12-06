@@ -11,20 +11,20 @@ type guard struct {
 	direction int
 }
 
-func (g guard) move(m string, width int) (guard, error) {
+func (g guard) move(m Map) (guard, error) {
 	candidate := -1
-	if g.direction == 0 && g.location-width >= 0 {
-		candidate = g.location - width
-	} else if g.direction == 1 && g.location%width+1 < width {
+	if g.direction == 0 && g.location-m.width >= 0 {
+		candidate = g.location - m.width
+	} else if g.direction == 1 && g.location%m.width+1 < m.width {
 		candidate = g.location + 1
-	} else if g.direction == 2 && g.location+width < len(m) {
-		candidate = g.location + width
-	} else if g.direction == 3 && g.location%width-1 >= 0 {
+	} else if g.direction == 2 && g.location+m.width < len(m.cells) {
+		candidate = g.location + m.width
+	} else if g.direction == 3 && g.location%m.width-1 >= 0 {
 		candidate = g.location - 1
 	}
 	if candidate == -1 {
 		return guard{}, errors.New("Run out of map")
-	} else if m[candidate] != '#' {
+	} else if m.cells[candidate] != '#' {
 		return guard{candidate, g.direction}, nil
 	} else {
 		return guard{g.location, (g.direction + 1) % 4}, nil
@@ -32,17 +32,15 @@ func (g guard) move(m string, width int) (guard, error) {
 }
 
 func Day06(input []string) {
-	width, height := len(input[0]), len(input)
-	fmt.Printf("width: %d, height: %d\n", width, height)
-	m := strings.Join(input, "")
-	part1, _ := findPath(m, width)
+	m := Map{strings.Join(input, ""), len(input[0])}
+	part1, _ := findPath(m)
 	part2 := 0
-	for i := range m {
-		if m[i] == '.' {
-			runes := []rune(m)
+	for i := range m.cells {
+		if m.cells[i] == '.' {
+			runes := []rune(m.cells)
 			runes[i] = '#'
-			new_map := string(runes)
-			_, err := findPath(new_map, width)
+			new_map := Map{string(runes), m.width}
+			_, err := findPath(new_map)
 			if err != nil {
 				part2++
 			}
@@ -52,13 +50,13 @@ func Day06(input []string) {
 	fmt.Println(part2)
 }
 
-func findPath(m string, width int) (int, error) {
+func findPath(m Map) (int, error) {
 	visited := make(map[guard]bool)
-	g := guard{strings.Index(m, "^"), 0}
+	g := guard{strings.Index(m.cells, "^"), 0}
 	var runOutOfMapError error
 	for runOutOfMapError == nil && !visited[g] {
 		visited[g] = true
-		g, runOutOfMapError = g.move(m, width)
+		g, runOutOfMapError = g.move(m)
 	}
 	if runOutOfMapError == nil {
 		return 0, errors.New("Stuck in loop")

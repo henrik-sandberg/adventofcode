@@ -1,5 +1,10 @@
 package main
 
+type Map struct {
+	cells string
+	width int
+}
+
 type point2d struct {
 	x, y int
 }
