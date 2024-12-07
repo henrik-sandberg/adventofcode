@@ -15,17 +15,15 @@ func Day04(input []string) {
 func day04_part1(m Map) (result int) {
 	search := "XMAS"
 	searchReverse := Reverse(search)
-	max_row := len(m.cells) / m.width
-	max_col := m.width
-	rows := make([]strings.Builder, max_row)
-	cols := make([]strings.Builder, max_col)
-	fdiag := make([]strings.Builder, max_row+max_col-1)
+	rows := make([]strings.Builder, m.Height())
+	cols := make([]strings.Builder, m.Width())
+	fdiag := make([]strings.Builder, m.Height()+m.Width()-1)
 	bdiag := make([]strings.Builder, len(fdiag))
 	for i := range m.cells {
 		rows[i/m.width].WriteByte(m.cells[i])
 		cols[i%m.width].WriteByte(m.cells[i])
 		fdiag[i%m.width+i/m.width].WriteByte(m.cells[i])
-		bdiag[i%m.width-i/m.width+max_row-1].WriteByte(m.cells[i])
+		bdiag[i%m.width-i/m.width+m.Height()-1].WriteByte(m.cells[i])
 	}
 	for _, arr := range [][]strings.Builder{rows, cols, fdiag, bdiag} {
 		for _, sb := range arr {

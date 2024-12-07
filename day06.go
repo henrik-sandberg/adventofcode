@@ -13,13 +13,13 @@ type guard struct {
 
 func (g guard) move(m Map) (guard, error) {
 	candidate := -1
-	if g.direction == 0 && g.location-m.width >= 0 {
-		candidate = g.location - m.width
-	} else if g.direction == 1 && g.location%m.width+1 < m.width {
+	if g.direction == 0 && g.location-m.Width() >= 0 {
+		candidate = g.location - m.Width()
+	} else if g.direction == 1 && g.location%m.Width()+1 < m.Width() {
 		candidate = g.location + 1
-	} else if g.direction == 2 && g.location+m.width < len(m.cells) {
-		candidate = g.location + m.width
-	} else if g.direction == 3 && g.location%m.width-1 >= 0 {
+	} else if g.direction == 2 && g.location+m.Width() < len(m.cells) {
+		candidate = g.location + m.Width()
+	} else if g.direction == 3 && g.location%m.Width()-1 >= 0 {
 		candidate = g.location - 1
 	}
 	if candidate == -1 {
@@ -39,7 +39,7 @@ func Day06(input []string) {
 		if m.cells[i] == '.' {
 			runes := []rune(m.cells)
 			runes[i] = '#'
-			new_map := Map{string(runes), m.width}
+			new_map := Map{string(runes), m.Width()}
 			_, err := findPath(new_map)
 			if err != nil {
 				part2++

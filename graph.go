@@ -5,6 +5,14 @@ type Map struct {
 	width int
 }
 
+func (m Map) Width() int {
+	return m.width
+}
+
+func (m Map) Height() int {
+	return len(m.cells) / m.width
+}
+
 type point2d struct {
 	x, y int
 }
