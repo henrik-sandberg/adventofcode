@@ -45,14 +45,15 @@ func fixInvalidOrder(order []string, rules map[string][]string) []string {
 	for len(ret) < len(order) {
 	findPage:
 		for _, page := range order {
-			if !Contains(ret, page) {
-				for _, needed := range rules[page] {
-					if !Contains(ret, needed) && Contains(order, needed) {
-						continue findPage
-					}
-				}
-				ret = append(ret, page)
+			if Contains(ret, page) {
+				continue
 			}
+			for _, needed := range rules[page] {
+				if !Contains(ret, needed) && Contains(order, needed) {
+					continue findPage
+				}
+			}
+			ret = append(ret, page)
 		}
 	}
 	return ret
