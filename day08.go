@@ -6,14 +6,9 @@ import (
 )
 
 func Day08(input []string) {
+	grid := Map{strings.Join(input, ""), len(input[0])}.ToComplexGrid()
 	frequencies := Bag(strings.Join(input, ""))
 	delete(frequencies, '.')
-	grid := make(map[complex64]rune, len(input)*len(input[0]))
-	for row, line := range input {
-		for col, cell := range line {
-			grid[complex(float32(col), float32(row))] = cell
-		}
-	}
 	for _, limit := range []struct{ from, to int }{{1, 2}, {0, 50}} {
 		antinodes := map[complex64]bool{}
 		for freq := range frequencies {
