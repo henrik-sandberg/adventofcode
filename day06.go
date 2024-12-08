@@ -7,46 +7,46 @@ import (
 )
 
 type guard struct {
-	loc, dir complex64
+	location, direction complex64
 }
 
 func Day06(input []string) {
 	m := Map{strings.Join(input, ""), len(input[0])}
 	grid := m.ToComplexGrid()
-	start := guard{m.GetPointComplex(strings.Index(m.cells, "^")), -1i}
+	start := guard{
+		location:  m.GetPointComplex(strings.Index(m.cells, "^")),
+		direction: -1i,
+	}
 	path, _ := findPath(grid, start)
-	unique := map[complex64]bool{}
+	unique := make(map[complex64]bool)
 	for k := range path {
-		unique[k.loc] = true
+		unique[k.location] = true
 	}
 	fmt.Println(len(unique))
+	delete(unique, start.location)
 	part2 := 0
-	for k, v := range grid {
-		if v == '.' {
-			grid[k] = '#'
-			if _, err := findPath(grid, start); err != nil {
-				part2++
-			}
-			grid[k] = '.'
+	for k := range unique {
+		grid[k] = '#'
+		if _, err := findPath(grid, start); err != nil {
+			part2++
 		}
+		grid[k] = '.'
 	}
 	fmt.Println(part2)
 }
 
 func findPath(grid map[complex64]rune, g guard) (map[guard]bool, error) {
-	visited := map[guard]bool{}
-	for {
+	visited := make(map[guard]bool, len(grid))
+	for !visited[g] {
 		visited[g] = true
-		candidate := g.loc + g.dir
-		if v, ok := grid[candidate]; !ok {
+		next := g.location + g.direction
+		if v, ok := grid[next]; !ok {
 			return visited, nil
 		} else if v == '#' {
-			g.dir *= 1i
+			g.direction *= 1i
 		} else {
-			g.loc = candidate
-		}
-		if visited[g] {
-			return nil, errors.New("Loop detected!")
+			g.location = next
 		}
 	}
+	return map[guard]bool{}, errors.New("Loop detected!")
 }
