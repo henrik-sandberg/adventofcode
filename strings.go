@@ -10,6 +10,16 @@ func Reverse(s string) string {
 	return string(rns)
 }
 
+func AllIndex(s string, r rune) []int {
+	ret := make([]int, 0, len(s))
+	for i, v := range []rune(s) {
+		if v == r {
+			ret = append(ret, i)
+		}
+	}
+	return ret
+}
+
 func ToInts(input []string) []int {
 	ints := make([]int, len(input), len(input))
 	for i, s := range input {

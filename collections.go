@@ -1,20 +1,5 @@
 package main
 
-// Returns the index of e in s. -1 if s does not contain e
-func IndexOf[T comparable](s []T, e T) int {
-	for i, v := range s {
-		if v == e {
-			return i
-		}
-	}
-	return -1
-}
-
-// Returns true if s contains e
-func Contains[T comparable](s []T, e T) bool {
-	return IndexOf(s, e) != -1
-}
-
 // Returns the count of e in s
 func Count[T comparable](s []T, e T) (res int) {
 	for _, v := range s {
@@ -41,12 +26,63 @@ func Intersect[T comparable](first, second []T) []T {
 	a := toMap(first)
 	b := toMap(second)
 	ret := make([]T, 0, min(len(a), len(b)))
-	for k, _ := range a {
+	for k := range a {
 		if _, ok := b[k]; ok {
 			ret = append(ret, k)
 		}
 	}
 	return ret
+}
+
+func Combinations[T interface{}](set []T, length int) <-chan []T {
+	ch := make(chan []T)
+
+	go func() {
+		defer close(ch)
+		var helper func([]T, int, []T)
+
+		helper = func(currentSet []T, length int, currentComb []T) {
+			if length == 0 {
+				comb := make([]T, len(currentComb))
+				copy(comb, currentComb)
+				ch <- comb
+				return
+			}
+			for i := 0; i <= len(currentSet)-length; i++ {
+				helper(currentSet[i+1:], length-1, append(currentComb, currentSet[i]))
+			}
+		}
+		helper(set, length, []T{})
+	}()
+	return ch
+}
+
+func Permutations[T interface{}](set []T, length int) <-chan []T {
+	ch := make(chan []T)
+	go func() {
+		defer close(ch)
+		used := make([]bool, len(set))
+		temp := make([]T, length)
+		var helper func(int)
+		helper = func(k int) {
+			if k == length {
+				tmp := make([]T, length)
+				copy(tmp, temp)
+				ch <- tmp
+				return
+			}
+			for i := 0; i < len(set); i++ {
+				if !used[i] {
+					used[i] = true
+					temp[k] = set[i]
+					helper(k + 1)
+					used[i] = false
+				}
+			}
+		}
+		helper(0)
+	}()
+	return ch
 }
 
 func toMap[T comparable](slice []T) map[T]bool {
@@ -59,7 +95,7 @@ func toMap[T comparable](slice []T) map[T]bool {
 
 func bag(s string) map[rune]int {
 	vals := make(map[rune]int, len(s))
-        for _, c := range s {
+	for _, c := range s {
 		vals[c]++
 	}
 	return vals

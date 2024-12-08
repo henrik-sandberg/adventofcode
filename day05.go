@@ -7,7 +7,7 @@ import (
 )
 
 func Day05(input []string) {
-	orderIndex := IndexOf(input, "")
+	orderIndex := slices.Index(input, "")
 	rules := map[string][]string{}
 	for _, rule := range input[:orderIndex] {
 		r := strings.Split(rule, "|")
