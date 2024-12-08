@@ -13,12 +13,24 @@ func (m Map) Height() int {
 	return len(m.cells) / m.width
 }
 
-func (m Map) GetPoint(index int) Point2d {
-	return Point2d{x: index % m.Width(), y: index / m.Height()}
+func (m Map) ToComplexGrid() map[complex64]rune {
+	ret := make(map[complex64]rune, m.Height()*m.Width())
+	for ind, v := range m.cells {
+		ret[m.GetPointComplex(ind)] = v
+	}
+	return ret
+}
+
+func (m Map) GetPointComplex(index int) complex64 {
+	return complex(float32(index%m.Width()), float32(index/m.Height()))
 }
 
 type Point2d struct {
 	x, y int
+}
+
+func (m Map) GetPoint(index int) Point2d {
+	return Point2d{x: index % m.Width(), y: index / m.Height()}
 }
 
 type rectangle struct {

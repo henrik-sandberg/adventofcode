@@ -6,7 +6,7 @@ import (
 )
 
 func Day08(input []string) {
-	frequencies := bag(strings.Join(input, ""))
+	frequencies := Bag(strings.Join(input, ""))
 	delete(frequencies, '.')
 	grid := make(map[complex64]rune, len(input)*len(input[0]))
 	for row, line := range input {

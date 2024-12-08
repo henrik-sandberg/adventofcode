@@ -92,11 +92,3 @@ func toMap[T comparable](slice []T) map[T]bool {
 	}
 	return ret
 }
-
-func bag(s string) map[rune]int {
-	vals := make(map[rune]int, len(s))
-	for _, c := range s {
-		vals[c]++
-	}
-	return vals
-}
