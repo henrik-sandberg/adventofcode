@@ -30,21 +30,19 @@ func Day12(input []string) {
 			longSides := 0
 			for p := range area {
 				v := grid[p]
-				// Check up
 				if v == grid[p-1i] {
-					if v != grid[p+1] && v != grid[p+1-1i] {
+					if right := p + 1; v != grid[right] && v != grid[right-1i] {
 						longSides++
 					}
-					if v != grid[p-1] && v != grid[p-1-1i] {
+					if left := p - 1; v != grid[left] && v != grid[left-1i] {
 						longSides++
 					}
 				}
-				// Check right
 				if v == grid[p+1] {
-					if v != grid[p-1i] && v != grid[p+1-1i] {
+					if up := p - 1i; v != grid[up] && v != grid[up+1] {
 						longSides++
 					}
-					if v != grid[p+1i] && v != grid[p+1+1i] {
+					if down := p + 1i; v != grid[down] && v != grid[down+1] {
 						longSides++
 					}
 				}
