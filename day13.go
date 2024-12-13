@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"regexp"
+	"slices"
 )
 
 func Day13(input []string) {
@@ -27,22 +28,22 @@ func Day13(input []string) {
 	fmt.Println(part2)
 }
 
-func clawMachine(M [][]int, PRIZE []int) []int {
+func clawMachine(M [][]int, P []int) []int {
 	X := []int{
 		determinant([][]int{
-			{PRIZE[0], M[0][1]},
-			{PRIZE[1], M[1][1]},
+			{P[0], M[0][1]},
+			{P[1], M[1][1]},
 		}) / determinant(M),
 		determinant([][]int{
-			{M[0][0], PRIZE[0]},
-			{M[1][0], PRIZE[1]},
+			{M[0][0], P[0]},
+			{M[1][0], P[1]},
 		}) / determinant(M),
 	}
-	solution := matrix_mul_2d(M, [][]int{
-		{X[0]},
-		{X[1]},
-	})
-	if PRIZE[0] == solution[0][0] && PRIZE[1] == solution[1][0] {
+	calculated := []int{
+		M[0][0]*X[0] + M[0][1]*X[1],
+		M[1][0]*X[0] + M[1][1]*X[1],
+	}
+	if slices.Equal(P, calculated) {
 		return X
 	}
 	return []int{0, 0}
@@ -50,26 +51,4 @@ func clawMachine(M [][]int, PRIZE []int) []int {
 
 func determinant(arr [][]int) int {
 	return arr[0][0]*arr[1][1] - arr[0][1]*arr[1][0]
-}
-
-func matrix_mul_2d(A, B [][]int) [][]int {
-	rA, cA := len(A), len(A[0])
-	rB, cB := len(B), len(B[0])
-
-	if cA != rB {
-		fmt.Println("Matrix multiplication is not valid.")
-		return nil
-	}
-	C := make([][]int, rA)
-	for i := range C {
-		C[i] = make([]int, cB)
-	}
-	for i := 0; i < rA; i++ {
-		for j := 0; j < cB; j++ {
-			for k := 0; k < cA; k++ {
-				C[i][j] += A[i][k] * B[k][j]
-			}
-		}
-	}
-	return C
 }
