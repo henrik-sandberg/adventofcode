@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"math"
 	"regexp"
 	"strings"
 )
@@ -26,16 +27,19 @@ func Day14(input []string) {
 		}
 	}
 	fmt.Println(multiply(quadrants...))
-	for n := 1; ; n++ {
+	mindev := math.MaxFloat32
+	part2 := 0
+	for n := 1; n < 10_000; n++ {
 		X, Y := make([]int, len(bots)), make([]int, len(bots))
 		for i, bot := range bots {
 			X[i], Y[i] = move(bot, n)
 		}
-		if sigx, sigy := stddev(X), stddev(Y); sigx+sigy < 40 {
-			fmt.Println(n)
-			break
+		if dev := stddev(X) + stddev(Y); dev < mindev {
+			mindev = dev
+			part2 = n
 		}
 	}
+	fmt.Println(part2)
 }
 
 func printChristmasTree(botX, botY []int, width, height int) {
