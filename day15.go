@@ -29,64 +29,47 @@ func Day15(input []string) {
 	fmt.Println(day15_sovler(m, bot, moves))
 }
 
-func day15_sovler(m map[complex64]rune, bot complex64, moves string) int {
+func day15_sovler(m map[complex64]rune, bot complex64, moves string) (res int) {
 	directions := map[rune]complex64{'<': -1, '^': -1i, '>': 1, 'v': 1i}
 moveloop:
 	for _, move := range moves {
 		dir := directions[move]
-		pointer := bot + dir
-		if m[pointer] == '#' {
-			continue
-		}
-		if m[pointer] == '.' {
-			bot += dir
-			continue
-		}
-		box := pointer
-		boxes := []complex64{box}
-		if imag(dir) != 0 {
+		pointer := bot
+		tiles := []complex64{pointer}
+		seen := []complex64{pointer}
+		for len(tiles) > 0 {
+			pointer, tiles = tiles[0], tiles[1:]
+			if !slices.Contains(seen, pointer) {
+				seen = append(seen, pointer)
+			}
+			pointer += dir
 			switch m[pointer] {
-			case '[':
-				boxes = append(boxes, box+1)
-			case ']':
-				boxes = append(boxes, box-1)
-			}
-		}
-		seen := []complex64{}
-		for len(boxes) > 0 {
-			box, boxes = boxes[0], boxes[1:]
-			if !slices.Contains(seen, box) {
-				seen = append(seen, box)
-			}
-			next := box + dir
-			switch m[next] {
 			case '#':
 				continue moveloop
 			case '[':
-				boxes = append(boxes, next)
+				tiles = append(tiles, pointer)
 				if imag(dir) != 0 {
-					boxes = append(boxes, next+1)
+					tiles = append(tiles, pointer+1)
 				}
 			case ']':
-				boxes = append(boxes, next)
+				tiles = append(tiles, pointer)
 				if imag(dir) != 0 {
-					boxes = append(boxes, next-1)
+					tiles = append(tiles, pointer-1)
 				}
 			case 'O':
-				boxes = append(boxes, next)
+				tiles = append(tiles, pointer)
 			}
 		}
 		slices.Reverse(seen)
-		for _, box := range seen {
-			m[box], m[box+dir] = m[box+dir], m[box]
+		for _, tile := range seen {
+			m[tile], m[tile+dir] = m[tile+dir], m[tile]
 		}
 		bot += dir
 	}
-	res := 0
 	for k, v := range m {
 		if v == 'O' || v == '[' {
 			res += 100*int(imag(k)) + int(real(k))
 		}
 	}
-	return res
+	return
 }
