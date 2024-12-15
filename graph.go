@@ -22,7 +22,7 @@ func (m Map) ToComplexGrid() map[complex64]rune {
 }
 
 func (m Map) GetPointComplex(index int) complex64 {
-	return complex(float32(index%m.Width()), float32(index/m.Height()))
+	return complex(float32(index%m.Width()), float32(index/m.Width()))
 }
 
 type Point2d struct {
