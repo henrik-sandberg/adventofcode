@@ -52,14 +52,15 @@ func Day16(input []string) {
 			}
 			paths[key] = path{current.cost, current.seen}
 		}
-		if v := m[current.position+current.direction]; v != '#' {
-			queue = append(queue, current.move(current.direction))
-		}
-		if left := current.direction * 1i; m[current.position+left] != '#' {
-			queue = append(queue, current.move(left))
-		}
-		if right := current.direction * -1i; m[current.position+right] != '#' {
-			queue = append(queue, current.move(right))
+		for _, change := range []struct {
+			dir  complex64
+			cost int
+		}{{1, 1}, {-1i, 1001}, {1i, 1001}} {
+			dir := current.direction * change.dir
+			next := current.position + dir
+			if m[next] != '#' {
+				queue = append(queue, current.update(next, dir, change.cost))
+			}
 		}
 	}
 
@@ -77,19 +78,11 @@ type reindeer struct {
 	seen      map[complex64]bool
 }
 
-func (r reindeer) move(direction complex64) reindeer {
-	cost := r.cost
-	nextPosition := r.position
-	if r.direction == direction {
-		cost += 1
-		nextPosition += direction
-	} else {
-		cost += 1000
-	}
+func (r reindeer) update(position, direction complex64, cost int) reindeer {
 	p := make(map[complex64]bool, len(r.seen)+1)
 	for k, v := range r.seen {
 		p[k] = v
 	}
-	p[nextPosition] = true
-	return reindeer{nextPosition, direction, cost, p}
+	p[position] = true
+	return reindeer{position, direction, r.cost + cost, p}
 }
