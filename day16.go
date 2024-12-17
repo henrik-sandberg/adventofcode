@@ -59,7 +59,13 @@ func Day16(input []string) {
 			dir := current.direction * change.dir
 			next := current.position + dir
 			if m[next] != '#' {
-				queue = append(queue, current.update(next, dir, change.cost))
+				p := make(map[complex64]bool, len(current.seen)+1)
+				for k, v := range current.seen {
+					p[k] = v
+				}
+				p[next] = true
+				updated := reindeer{next, dir, current.cost + change.cost, p}
+				queue = append(queue, updated)
 			}
 		}
 	}
@@ -76,13 +82,4 @@ type reindeer struct {
 	direction complex64
 	cost      int
 	seen      map[complex64]bool
-}
-
-func (r reindeer) update(position, direction complex64, cost int) reindeer {
-	p := make(map[complex64]bool, len(r.seen)+1)
-	for k, v := range r.seen {
-		p[k] = v
-	}
-	p[position] = true
-	return reindeer{position, direction, r.cost + cost, p}
 }
