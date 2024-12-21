@@ -1,6 +1,7 @@
 package main
 
 import (
+	"container/heap"
 	"fmt"
 	"math"
 	"strings"
@@ -8,49 +9,43 @@ import (
 
 func Day16(input []string) {
 	m := Map{strings.Join(input, ""), len(input[0])}.ToComplexGrid()
-	type path struct {
-		cost  int
-		tiles map[complex64]bool
-	}
 	type pathkey struct {
 		position  complex64
 		direction complex64
 	}
-	var start complex64
+	var start, target complex64
 	for k, v := range m {
-		if v == 'S' {
+		switch v {
+		case 'S':
 			start = k
+			m[k] = '.'
+		case 'E':
+			target = k
+			m[k] = '.'
 		}
 	}
-	current := reindeer{start, 1, 0, map[complex64]bool{start: true}}
-	paths := map[pathkey]path{}
-	queue := []reindeer{current}
-	failfast := map[complex64]int{}
+	fmt.Println("Start:", start, "target:", target)
 	best := math.MaxInt
-	for len(queue) > 0 {
-		current, queue = queue[0], queue[1:]
-		if current.cost > best {
-			continue
-		} else if m[current.position] == 'E' && current.cost < best {
-			best = current.cost
-		}
-		if seen, ok := failfast[current.position]; !ok || current.cost < seen+1001 {
-			failfast[current.position] = current.cost
-		} else {
-			continue
-		}
+	dist := map[pathkey]int{{start, 1}: 0}
+	seen := map[complex64]bool{start: true}
+	pq := &PriorityQueue[reindeer]{}
+	heap.Init(pq)
+	enqueue := func(r reindeer) {
+		heap.Push(pq, &Item[reindeer]{value: r, priority: r.cost})
+	}
+	enqueue(reindeer{start, 1, 0, map[complex64]bool{start: true}})
+	for pq.Len() > 0 {
+		current := heap.Pop(pq).(*Item[reindeer]).value
 		key := pathkey{current.position, current.direction}
-		previous, ok := paths[key]
-		if ok && current.cost > previous.cost {
+		if previous, ok := dist[key]; ok && current.cost > previous {
 			continue
 		}
-		if !ok || current.cost < previous.cost {
-			paths[key] = path{current.cost, current.seen}
-		} else if current.cost == previous.cost {
-			for k, v := range previous.tiles {
-				current.seen[k] = v
+		dist[key] = current.cost
+		if current.position == target && current.cost <= best {
+			for k := range current.seen {
+				seen[k] = true
 			}
-			paths[key] = path{current.cost, current.seen}
+			best = current.cost
 		}
 		for _, change := range []struct {
 			dir  complex64
@@ -58,23 +53,22 @@ func Day16(input []string) {
 		}{{1, 1}, {-1i, 1001}, {1i, 1001}} {
 			dir := current.direction * change.dir
 			next := current.position + dir
-			if m[next] != '#' {
+			key := pathkey{next, dir}
+			if _, ok := dist[key]; ok {
+				continue
+			}
+			if m[next] == '.' {
 				p := make(map[complex64]bool, len(current.seen)+1)
 				for k, v := range current.seen {
 					p[k] = v
 				}
 				p[next] = true
-				updated := reindeer{next, dir, current.cost + change.cost, p}
-				queue = append(queue, updated)
+				enqueue(reindeer{next, dir, current.cost + change.cost, p})
 			}
 		}
 	}
-
-	for k, v := range paths {
-		if m[k.position] == 'E' {
-			fmt.Println(k, v.cost, len(v.tiles))
-		}
-	}
+	fmt.Println(best)
+	fmt.Println(len(seen))
 }
 
 type reindeer struct {
