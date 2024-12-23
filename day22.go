@@ -7,13 +7,9 @@ import (
 func Day22(input []string) {
 	iterations := 2000
 	iterate := func(i int) int {
-		mask := (1 << 24) - 1
-		i ^= i << 6
-		i &= mask
-		i ^= i >> 5
-		i &= mask
-		i ^= i << 11
-		i &= mask
+		i ^= i << 6 & 0xFFFFFF
+		i ^= i >> 5 & 0xFFFFFF
+		i ^= i << 11 & 0xFFFFFF
 		return i
 	}
 	part1 := 0
