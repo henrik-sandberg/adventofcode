@@ -13,7 +13,7 @@ func Day23(input []string) {
 		edges[e[0]] = append(edges[e[0]], e[1])
 		edges[e[1]] = append(edges[e[1]], e[0])
 	}
-	isRing := func(s []string) bool {
+	allConnected := func(s []string) bool {
 		for pair := range Combinations(s, 2) {
 			if !slices.Contains(edges[pair[0]], pair[1]) {
 				return false
@@ -25,7 +25,7 @@ func Day23(input []string) {
 	for k, v := range edges {
 		if strings.HasPrefix(k, "t") {
 			for combination := range Combinations(v, 2) {
-				if isRing(combination) {
+				if allConnected(combination) {
 					ring := append(combination, k)
 					slices.Sort(ring)
 					rings[strings.Join(ring, ",")] = true
@@ -33,25 +33,26 @@ func Day23(input []string) {
 			}
 		}
 	}
-	fmt.Println(len(rings))
-	maxLength := 0
-	for _, v := range edges {
-		if len(v) > maxLength {
-			maxLength = len(v)
+	part1 := len(rings)
+	part2 := func() string {
+		length := 0
+		for _, v := range edges {
+			if len(v) > length {
+				length = len(v)
+			}
 		}
-	}
-	fmt.Println(func() string {
-		for length := maxLength; ; length-- {
+		for ; ; length-- {
 			for k, v := range edges {
 				for combination := range Combinations(v, length) {
-					if isRing(combination) {
-						ring := append(combination, k)
-						slices.Sort(ring)
-						return strings.Join(ring, ",")
+					if allConnected(combination) {
+						ans := append(combination, k)
+						slices.Sort(ans)
+						return strings.Join(ans, ",")
 					}
-
 				}
 			}
 		}
-	}())
+	}()
+	fmt.Println(part1)
+	fmt.Println(part2)
 }
