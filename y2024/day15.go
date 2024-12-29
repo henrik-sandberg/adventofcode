@@ -6,7 +6,7 @@ import (
 	"strings"
 )
 
-func Day15(input []string) shared.Solution {
+func Day15(input []string) (solution shared.Solution[int, int]) {
 	splitindex := slices.Index(input, "")
 	moves := strings.Join(input[splitindex:], "")
 	setup := func() (map[complex64]rune, complex64) {
@@ -16,9 +16,8 @@ func Day15(input []string) shared.Solution {
 		m[bot] = '.'
 		return m, bot
 	}
-
 	m, bot := setup()
-	part1 := day15_sovler(m, bot, moves)
+	solution.Part1 = day15_sovler(m, bot, moves)
 	for i := 0; i < splitindex; i++ {
 		input[i] = strings.ReplaceAll(input[i], "#", "##")
 		input[i] = strings.ReplaceAll(input[i], "O", "[]")
@@ -26,8 +25,8 @@ func Day15(input []string) shared.Solution {
 		input[i] = strings.ReplaceAll(input[i], "@", "@.")
 	}
 	m, bot = setup()
-	part2 := day15_sovler(m, bot, moves)
-	return shared.Solution{Part1: part1, Part2: part2}
+	solution.Part2 = day15_sovler(m, bot, moves)
+	return
 }
 
 func day15_sovler(m map[complex64]rune, bot complex64, moves string) (res int) {

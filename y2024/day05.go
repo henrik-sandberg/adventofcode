@@ -7,7 +7,7 @@ import (
 	"strings"
 )
 
-func Day05(input []string) shared.Solution {
+func Day05(input []string) (solution shared.Solution[int, int]) {
 	orderIndex := slices.Index(input, "")
 	rules := map[string][]string{}
 	for _, rule := range input[:orderIndex] {
@@ -23,8 +23,6 @@ func Day05(input []string) shared.Solution {
 		}
 		return 0
 	}
-	part1 := 0
-	part2 := 0
 	for _, order := range input[orderIndex+1:] {
 		ord := strings.Split(order, ",")
 		sorted := make([]string, len(ord))
@@ -32,10 +30,10 @@ func Day05(input []string) shared.Solution {
 		slices.SortStableFunc(sorted, orderSortFunc)
 		pageValue, _ := strconv.Atoi(sorted[len(sorted)/2])
 		if slices.Equal(ord, sorted) {
-			part1 += pageValue
+			solution.Part1 += pageValue
 		} else {
-			part2 += pageValue
+			solution.Part2 += pageValue
 		}
 	}
-	return shared.Solution{Part1: part1, Part2: part2}
+	return
 }

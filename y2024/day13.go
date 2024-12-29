@@ -5,11 +5,9 @@ import (
 	"regexp"
 )
 
-func Day13(input []string) shared.Solution {
+func Day13(input []string) (solution shared.Solution[int, int]) {
 	re := regexp.MustCompile(`\d+`)
 	increment := 10000000000000
-	part1 := 0
-	part2 := 0
 	solver := func(A, B, P []int) int {
 		det := A[0]*B[1] - A[1]*B[0]
 		X := []int{
@@ -25,8 +23,8 @@ func Day13(input []string) shared.Solution {
 		A := shared.IntSlice(re.FindAllString(input[i], 2))
 		B := shared.IntSlice(re.FindAllString(input[i+1], 2))
 		P := shared.IntSlice(re.FindAllString(input[i+2], 2))
-		part1 += solver(A, B, P)
-		part2 += solver(A, B, []int{P[0] + increment, P[1] + increment})
+		solution.Part1 += solver(A, B, P)
+		solution.Part2 += solver(A, B, []int{P[0] + increment, P[1] + increment})
 	}
-	return shared.Solution{Part1: part1, Part2: part2}
+	return
 }

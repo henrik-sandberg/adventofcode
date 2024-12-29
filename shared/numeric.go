@@ -61,6 +61,7 @@ func PositiveMod(i, mod int) int {
 	return (i%mod + mod) % mod
 }
 
+// Returns 1 if true, else 0
 func BoolToInt(b bool) int {
 	if b {
 		return 1

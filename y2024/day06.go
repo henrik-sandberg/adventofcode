@@ -9,7 +9,7 @@ type guard struct {
 	location, direction complex64
 }
 
-func Day06(input []string) shared.Solution {
+func Day06(input []string) (solution shared.Solution[int, int]) {
 	grid := shared.NewGrid(input)
 	start := guard{
 		location:  grid.FindAny('^'),
@@ -20,17 +20,16 @@ func Day06(input []string) shared.Solution {
 	for k := range path {
 		unique[k.location] = true
 	}
-	part1 := len(unique)
+	solution.Part1 = len(unique)
 	delete(unique, start.location)
-	part2 := 0
 	for k := range unique {
 		grid[k] = '#'
 		if _, err := findPath(grid, start); err != nil {
-			part2++
+			solution.Part2++
 		}
 		grid[k] = '.'
 	}
-	return shared.Solution{Part1: part1, Part2: part2}
+	return
 }
 
 func findPath(grid map[complex64]rune, g guard) (map[guard]bool, error) {

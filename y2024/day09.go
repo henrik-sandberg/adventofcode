@@ -4,7 +4,7 @@ import (
 	"adventofcode/shared"
 )
 
-func Day09(input []string) shared.Solution {
+func Day09(input []string) (solution shared.Solution[int, int]) {
 	disk1 := []int{}
 	for i, v := range input[0] {
 		var d int
@@ -29,10 +29,9 @@ func Day09(input []string) shared.Solution {
 		}
 		return
 	}
-	return shared.Solution{
-		Part1: checksum(disk1),
-		Part2: checksum(disk2),
-	}
+	solution.Part1 = checksum(disk1)
+	solution.Part2 = checksum(disk2)
+	return
 }
 
 func day09_part1(arr []int) {

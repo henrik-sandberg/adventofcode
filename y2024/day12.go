@@ -4,10 +4,8 @@ import (
 	"adventofcode/shared"
 )
 
-func Day12(input []string) shared.Solution {
+func Day12(input []string) (solution shared.Solution[int, int]) {
 	grid := shared.NewGrid(input)
-	part1 := 0
-	part2 := 0
 	seen := map[complex64]bool{}
 	for point := range grid {
 		if !seen[point] {
@@ -16,7 +14,7 @@ func Day12(input []string) shared.Solution {
 			queue := []complex64{point}
 			for len(queue) > 0 {
 				point, queue = queue[0], queue[1:]
-				for _, dir := range []complex64{1, -1, -1i, 1i} {
+				for _, dir := range grid.Directions() {
 					if next := point + dir; grid[next] != grid[point] {
 						area[point]++
 					} else if !seen[next] {
@@ -50,9 +48,9 @@ func Day12(input []string) shared.Solution {
 			for _, v := range area {
 				tmp += v
 			}
-			part1 += len(area) * tmp
-			part2 += len(area) * (tmp - longSides)
+			solution.Part1 += len(area) * tmp
+			solution.Part2 += len(area) * (tmp - longSides)
 		}
 	}
-	return shared.Solution{Part1: part1, Part2: part2}
+	return
 }

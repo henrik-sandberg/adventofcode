@@ -4,17 +4,16 @@ import (
 	"adventofcode/shared"
 )
 
-func Day10(input []string) shared.Solution {
+func Day10(input []string) (solution shared.Solution[int, int]) {
 	grid := shared.NewGrid(input)
 	solver := func(distinctTrails bool) (res int) {
-		for _, start := range grid.FindAll('0') {
+		for _, point := range grid.FindAll('0') {
 			seen := map[complex64]bool{}
-			queue := []complex64{start}
-			var p complex64
+			queue := []complex64{point}
 			for len(queue) > 0 {
-				p, queue = queue[0], queue[1:]
-				for _, dir := range []complex64{1, -1, -1i, 1i} {
-					if next := p + dir; (!seen[next] || distinctTrails) && grid[p]+1 == grid[next] {
+				point, queue = queue[0], queue[1:]
+				for _, dir := range grid.Directions() {
+					if next := point + dir; (!seen[next] || distinctTrails) && grid[point]+1 == grid[next] {
 						seen[next] = true
 						if grid[next] == '9' {
 							res++
@@ -27,8 +26,7 @@ func Day10(input []string) shared.Solution {
 		}
 		return
 	}
-	return shared.Solution{
-		Part1: solver(false),
-		Part2: solver(true),
-	}
+	solution.Part1 = solver(false)
+	solution.Part2 = solver(true)
+	return
 }

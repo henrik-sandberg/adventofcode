@@ -2,26 +2,24 @@ package y2024
 
 import (
 	"adventofcode/shared"
-	"sort"
+	"slices"
 	"strings"
 )
 
-func Day01(input []string) shared.Solution {
-	parsed := [][]int{{}, {}}
+func Day01(input []string) (solution shared.Solution[int, int]) {
+	A, B := []int{}, []int{}
 	for _, line := range input {
 		ints := shared.IntSlice(strings.Fields(line))
-		parsed[0] = append(parsed[0], ints[0])
-		parsed[1] = append(parsed[1], ints[1])
+		A = append(A, ints[0])
+		B = append(B, ints[1])
 	}
-	sort.Sort(sort.IntSlice(parsed[0]))
-	sort.Sort(sort.IntSlice(parsed[1]))
-	part1 := 0
+	slices.Sort(A)
+	slices.Sort(B)
 	for i := range input {
-		part1 = part1 + shared.Abs(parsed[0][i]-parsed[1][i])
+		solution.Part1 += shared.Abs(A[i] - B[i])
 	}
-	part2 := 0
-	for _, v := range parsed[0] {
-		part2 = part2 + v*shared.Count(parsed[1], v)
+	for _, v := range A {
+		solution.Part2 += v * shared.Count(B, v)
 	}
-	return shared.Solution{Part1: part1, Part2: part2}
+	return
 }

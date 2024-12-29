@@ -5,7 +5,7 @@ import (
 	"strconv"
 )
 
-func Day21(input []string) shared.Solution {
+func Day21(input []string) (solution shared.Solution[int, int]) {
 	keypad := map[rune]map[rune]string{
 		'A': {'<': "v<<A", '>': "vA", '^': "<A", 'v': "<vA", 'A': "A", '0': "<A", '1': "^<<A", '2': "<^A", '3': "^A", '4': "^^<<A", '5': "<^^A", '6': "^^A", '7': "^^^<<A", '8': "<^^^A", '9': "^^^A"},
 		'^': {'<': "v<A", '>': "v>A", '^': "A", 'v': "vA", 'A': ">A"},
@@ -53,8 +53,7 @@ func Day21(input []string) shared.Solution {
 		}
 		return res
 	}
-	return shared.Solution{
-		Part1: solver(3),
-		Part2: solver(26),
-	}
+	solution.Part1 = solver(3)
+	solution.Part2 = solver(26)
+	return
 }

@@ -5,7 +5,7 @@ import (
 	"strings"
 )
 
-func Day18(input []string) shared.Solution {
+func Day18(input []string) (solution shared.Solution[int, string]) {
 	iterations := 1024
 	size := 71
 	target := complex64(70 + 70i)
@@ -42,14 +42,13 @@ func Day18(input []string) shared.Solution {
 	for _, line := range input[:iterations] {
 		dropByte(line)
 	}
-	part1 := bfs()
-	var part2 string
+	solution.Part1 = bfs()
 	for _, line := range input[iterations:] {
 		dropByte(line)
 		if bfs() == -1 {
-			part2 = line
+			solution.Part2 = line
 			break
 		}
 	}
-	return shared.Solution{Part1: part1, Part2: part2}
+	return
 }

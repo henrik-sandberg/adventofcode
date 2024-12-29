@@ -4,7 +4,7 @@ import (
 	"adventofcode/shared"
 )
 
-func Day25(input []string) shared.Solution {
+func Day25(input []string) (solution shared.Solution[int, any]) {
 	locks := [][]int{}
 	keys := [][]int{}
 	for r := 0; r < len(input); r += 8 {
@@ -24,7 +24,6 @@ func Day25(input []string) shared.Solution {
 			keys = append(keys, h)
 		}
 	}
-	part1 := 0
 	for _, key := range keys {
 	lockloop:
 		for _, lock := range locks {
@@ -33,8 +32,8 @@ func Day25(input []string) shared.Solution {
 					continue lockloop
 				}
 			}
-			part1++
+			solution.Part1++
 		}
 	}
-	return shared.Solution{Part1: part1, Part2: nil}
+	return
 }

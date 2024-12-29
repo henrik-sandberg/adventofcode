@@ -8,7 +8,7 @@ import (
 	"strings"
 )
 
-func Day24(input []string) shared.Solution {
+func Day24(input []string) (solution shared.Solution[int, string]) {
 	inputIndex := slices.Index(input, "")
 	registers := map[string]int{}
 	for _, register := range input[:inputIndex] {
@@ -45,11 +45,10 @@ func Day24(input []string) shared.Solution {
 			panic("Unknown operand: " + gate.op)
 		}
 	}
-	part1 := 0
 	for reg := range maps.Keys(gates) {
 		if reg[0] == 'z' {
 			tmp, _ := strconv.Atoi(reg[1:])
-			part1 |= loadValue(reg) << tmp
+			solution.Part1 |= loadValue(reg) << tmp
 		}
 	}
 	bad := map[string]bool{}
@@ -78,8 +77,6 @@ func Day24(input []string) shared.Solution {
 			}
 		}
 	}
-	return shared.Solution{
-		Part1: part1,
-		Part2: strings.Join(slices.Sorted(maps.Keys(bad)), ","),
-	}
+	solution.Part2 = strings.Join(slices.Sorted(maps.Keys(bad)), ",")
+	return
 }

@@ -6,7 +6,7 @@ import (
 	"math"
 )
 
-func Day16(input []string) shared.Solution {
+func Day16(input []string) (solution shared.Solution[int, int]) {
 	m := shared.NewGrid(input)
 	type pathkey struct {
 		position  complex64
@@ -57,7 +57,9 @@ func Day16(input []string) shared.Solution {
 			}
 		}
 	}
-	return shared.Solution{Part1: best, Part2: len(seen)}
+	solution.Part1 = best
+	solution.Part2 = len(seen)
+	return
 }
 
 type reindeer struct {

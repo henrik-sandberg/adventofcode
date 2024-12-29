@@ -6,7 +6,7 @@ import (
 	"regexp"
 )
 
-func Day14(input []string) shared.Solution {
+func Day14(input []string) (solution shared.Solution[int, int]) {
 	re := regexp.MustCompile(`-?\d+`)
 	bots := make([][]int, len(input))
 	for i, line := range input {
@@ -25,9 +25,8 @@ func Day14(input []string) shared.Solution {
 			quadrants[2*x/width+2*(2*y/height)]++
 		}
 	}
-	part1 := shared.Product(quadrants...)
+	solution.Part1 = shared.Product(quadrants...)
 	mindev := math.MaxFloat32
-	part2 := 0
 	for n := 1; n < 10_000; n++ {
 		X, Y := make([]int, len(bots)), make([]int, len(bots))
 		for i, bot := range bots {
@@ -35,8 +34,8 @@ func Day14(input []string) shared.Solution {
 		}
 		if dev := shared.Stddev(X) + shared.Stddev(Y); dev < mindev {
 			mindev = dev
-			part2 = n
+			solution.Part2 = n
 		}
 	}
-	return shared.Solution{Part1: part1, Part2: part2}
+	return
 }

@@ -6,7 +6,7 @@ import (
 	"strings"
 )
 
-func Day23(input []string) shared.Solution {
+func Day23(input []string) (solution shared.Solution[int, string]) {
 	edges := map[string][]string{}
 	for _, edge := range input {
 		e := strings.Split(edge, "-")
@@ -33,8 +33,8 @@ func Day23(input []string) shared.Solution {
 			}
 		}
 	}
-	part1 := len(rings)
-	part2 := func() string {
+	solution.Part1 = len(rings)
+	solution.Part2 = func() string {
 		length := 0
 		for _, v := range edges {
 			if len(v) > length {
@@ -53,5 +53,5 @@ func Day23(input []string) shared.Solution {
 			}
 		}
 	}()
-	return shared.Solution{Part1: part1, Part2: part2}
+	return
 }

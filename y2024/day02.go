@@ -6,26 +6,24 @@ import (
 	"strings"
 )
 
-func Day02(input []string) shared.Solution {
-	part1 := 0
-	part2 := 0
+func Day02(input []string) (solution shared.Solution[int, int]) {
 	for _, line := range input {
 		nums := shared.IntSlice(strings.Fields(line))
 		if isSafeLevel(nums) {
-			part1++
-			part2++
+			solution.Part1++
+			solution.Part2++
 		} else {
 			for ind := range nums {
 				oneDropped := append([]int{}, nums[:ind]...)
 				oneDropped = append(oneDropped, nums[ind+1:]...)
 				if isSafeLevel(oneDropped) {
-					part2++
+					solution.Part2++
 					break
 				}
 			}
 		}
 	}
-	return shared.Solution{Part1: part1, Part2: part2}
+	return
 }
 
 func isSafeLevel(nums []int) bool {

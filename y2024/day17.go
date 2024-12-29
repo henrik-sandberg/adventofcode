@@ -21,7 +21,7 @@ import (
 		out b % 8
 */
 
-func Day17(input []string) shared.Solution {
+func Day17(input []string) (solution shared.Solution[string, int]) {
 	registerA, _ := strconv.Atoi(strings.Split(input[0], " ")[2])
 	program := shared.IntSlice(strings.Split(strings.Split(input[4], " ")[1], ","))
 	slices.Reverse(program)
@@ -33,6 +33,7 @@ func Day17(input []string) shared.Solution {
 		output = append(output, fmt.Sprint(out(registerA)))
 		registerA >>= 3
 	}
+	solution.Part1 = strings.Join(output, ",")
 	var dfs func([]int, int) int
 	dfs = func(seen []int, a int) int {
 		if slices.Equal(seen, program) {
@@ -50,8 +51,6 @@ func Day17(input []string) shared.Solution {
 		}
 		return 0
 	}
-	return shared.Solution{
-		Part1: strings.Join(output, ","),
-		Part2: dfs([]int{}, 0),
-	}
+	solution.Part2 = dfs([]int{}, 0)
+	return
 }

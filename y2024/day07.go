@@ -6,14 +6,12 @@ import (
 	"strings"
 )
 
-func Day07(input []string) shared.Solution {
-	part1 := 0
-	part2 := 0
+func Day07(input []string) (solution shared.Solution[int, int]) {
 	for _, line := range input {
-		part1 += validateEquation(line, []func(ints ...int) int{
+		solution.Part1 += validateEquation(line, []func(ints ...int) int{
 			shared.Sum, shared.Product,
 		})
-		part2 += validateEquation(line, []func(ints ...int) int{
+		solution.Part2 += validateEquation(line, []func(ints ...int) int{
 			shared.Sum, shared.Product,
 			func(ints ...int) int {
 				sb := strings.Builder{}
@@ -25,7 +23,7 @@ func Day07(input []string) shared.Solution {
 			},
 		})
 	}
-	return shared.Solution{Part1: part1, Part2: part2}
+	return
 }
 
 func validateEquation(eq string, operations []func(ints ...int) int) int {

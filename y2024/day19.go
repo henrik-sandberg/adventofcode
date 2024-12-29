@@ -5,7 +5,7 @@ import (
 	"strings"
 )
 
-func Day19(input []string) shared.Solution {
+func Day19(input []string) (solution shared.Solution[int, int]) {
 	available := strings.Split(input[0], ", ")
 	cache := map[string]int{}
 	var search func(string, []string) int
@@ -26,15 +26,13 @@ func Day19(input []string) shared.Solution {
 		cache[s] = res
 		return res
 	}
-	part1 := 0
-	part2 := 0
 	for _, design := range input[2:] {
 		found := search(design, []string{})
 		if found > 0 {
-			part1 += 1
+			solution.Part1 += 1
 		}
-		part2 += found
+		solution.Part2 += found
 
 	}
-	return shared.Solution{Part1: part1, Part2: part2}
+	return
 }

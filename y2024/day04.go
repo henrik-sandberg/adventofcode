@@ -5,7 +5,7 @@ import (
 	"strings"
 )
 
-func Day04(input []string) shared.Solution {
+func Day04(input []string) (solution shared.Solution[int, int]) {
 	h, w := len(input), len(input[0])
 	rows := make([]strings.Builder, h)
 	cols := make([]strings.Builder, w)
@@ -19,15 +19,13 @@ func Day04(input []string) shared.Solution {
 			bdiag[x-y+h-1].WriteRune(val)
 		}
 	}
-	part1 := 0
 	search := "XMAS"
 	searchReverse := shared.Reverse(search)
 	for _, arr := range [][]strings.Builder{rows, cols, fdiag, bdiag} {
 		for _, sb := range arr {
-			part1 += strings.Count(sb.String(), search) + strings.Count(sb.String(), searchReverse)
+			solution.Part1 += strings.Count(sb.String(), search) + strings.Count(sb.String(), searchReverse)
 		}
 	}
-	part2 := 0
 	grid := shared.NewGrid(input)
 	for _, a := range grid.FindAll('A') {
 		ns := []rune{
@@ -36,7 +34,7 @@ func Day04(input []string) shared.Solution {
 			grid[a-1+1i],
 			grid[a+1+1i],
 		}
-		part2 += shared.BoolToInt(ns[0] != ns[3] && shared.Count(ns, 'M') == 2 && shared.Count(ns, 'S') == 2)
+		solution.Part2 += shared.BoolToInt(ns[0] != ns[3] && shared.Count(ns, 'M') == 2 && shared.Count(ns, 'S') == 2)
 	}
-	return shared.Solution{Part1: part1, Part2: part2}
+	return
 }

@@ -5,7 +5,7 @@ import (
 	"strings"
 )
 
-func Day08(input []string) shared.Solution {
+func Day08(input []string) (solution shared.Solution[int, int]) {
 	grid := shared.NewGrid(input)
 	frequencies := shared.RuneBag(strings.Join(input, ""))
 	delete(frequencies, '.')
@@ -33,5 +33,7 @@ func Day08(input []string) shared.Solution {
 		}
 		return
 	}
-	return shared.Solution{Part1: solver(1, 2), Part2: solver(0, 50)}
+	solution.Part1 = solver(1, 2)
+	solution.Part2 = solver(0, 50)
+	return
 }

@@ -34,3 +34,23 @@ func NewGrid(arr []string) Grid {
 	}
 	return ret
 }
+
+func (g *Grid) Up() complex64 {
+	return -1i
+}
+
+func (g *Grid) Down() complex64 {
+	return 1i
+}
+
+func (g *Grid) Left() complex64 {
+	return -1
+}
+
+func (g *Grid) Right() complex64 {
+	return 1
+}
+
+func (g *Grid) Directions() []complex64 {
+	return []complex64{g.Up(), g.Right(), g.Down(), g.Left()}
+}

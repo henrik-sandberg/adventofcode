@@ -8,12 +8,12 @@ import (
 	"time"
 )
 
-type Solution struct {
-	Part1 any
-	Part2 any
+type Solution[T1, T2 any] struct {
+	Part1 T1
+	Part2 T2
 }
 
-func Run(f func([]string) Solution) {
+func Run[T1, T2 any](f func([]string) Solution[T1, T2]) {
 	input := readLines()
 	start := time.Now()
 	solution := f(input)

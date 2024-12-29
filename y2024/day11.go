@@ -12,14 +12,13 @@ type stoneSplitLength struct {
 	remaining int
 }
 
-func Day11(input []string) shared.Solution {
-	part1, part2 := 0, 0
+func Day11(input []string) (solution shared.Solution[int, int]) {
 	memo := map[stoneSplitLength]int{}
 	for _, stone := range strings.Fields(input[0]) {
-		part1 += split(memo, stone, 0, 25)
-		part2 += split(memo, stone, 0, 75)
+		solution.Part1 += split(memo, stone, 0, 25)
+		solution.Part2 += split(memo, stone, 0, 75)
 	}
-	return shared.Solution{Part1: part1, Part2: part2}
+	return
 }
 
 func split(memo map[stoneSplitLength]int, v string, current, depth int) (res int) {

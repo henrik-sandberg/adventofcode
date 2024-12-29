@@ -5,7 +5,7 @@ import (
 	"fmt"
 )
 
-func Day22(input []string) shared.Solution {
+func Day22(input []string) (solution shared.Solution[int, int]) {
 	iterations := 2000
 	iterate := func(i int) int {
 		i ^= i << 6 & 0xFFFFFF
@@ -13,12 +13,11 @@ func Day22(input []string) shared.Solution {
 		i ^= i << 11 & 0xFFFFFF
 		return i
 	}
-	part1 := 0
 	for _, secret := range shared.IntSlice(input) {
 		for i := 0; i < iterations; i++ {
 			secret = iterate(secret)
 		}
-		part1 += secret
+		solution.Part1 += secret
 	}
 	monkey := func(secret int) *map[string]int {
 		windowLength := 4
@@ -48,11 +47,10 @@ func Day22(input []string) shared.Solution {
 			prices[k] += v
 		}
 	}
-	part2 := 0
 	for _, v := range prices {
-		if v > part2 {
-			part2 = v
+		if v > solution.Part2 {
+			solution.Part2 = v
 		}
 	}
-	return shared.Solution{Part1: part1, Part2: part2}
+	return
 }

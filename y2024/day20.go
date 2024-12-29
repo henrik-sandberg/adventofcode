@@ -4,26 +4,24 @@ import (
 	"adventofcode/shared"
 )
 
-func Day20(input []string) shared.Solution {
-	return Day20Solver(input, 100)
+func Day20(input []string) shared.Solution[int, int] {
+	return day20Solver(input, 100)
 }
 
-func Day20Solver(input []string, limit int) shared.Solution {
-	m := shared.NewGrid(input)
-	start := m.FindAny('S')
-	target := m.FindAny('E')
+func day20Solver(input []string, limit int) (solution shared.Solution[int, int]) {
+	grid := shared.NewGrid(input)
+	start := grid.FindAny('S')
+	target := grid.FindAny('E')
 	arr := []complex64{start}
 	for arr[len(arr)-1] != target {
-		for _, dir := range []complex64{-1i, 1, 1i, -1} {
+		for _, dir := range grid.Directions() {
 			next := arr[len(arr)-1] + dir
-			if m[next] != '#' && (len(arr) < 2 || arr[len(arr)-2] != next) {
+			if grid[next] != '#' && (len(arr) < 2 || arr[len(arr)-2] != next) {
 				arr = append(arr, next)
 				break
 			}
 		}
 	}
-	part1 := 0
-	part2 := 0
 	manhattan := func(a, b complex64) int {
 		return shared.Abs(int(real(a)-real(b))) + shared.Abs(int(imag(a)-imag(b)))
 	}
@@ -32,12 +30,12 @@ func Day20Solver(input []string, limit int) shared.Solution {
 			cheatDistance := manhattan(first, arr[j])
 			saved := (j - i) - cheatDistance
 			if cheatDistance <= 2 && saved >= limit {
-				part1++
+				solution.Part1++
 			}
 			if cheatDistance <= 20 && saved >= limit {
-				part2++
+				solution.Part2++
 			}
 		}
 	}
-	return shared.Solution{Part1: part1, Part2: part2}
+	return
 }
