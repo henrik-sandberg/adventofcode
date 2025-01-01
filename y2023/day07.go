@@ -58,7 +58,7 @@ func isLess(card1, card2 string, maxOccurrences func(string) []int, cardValue []
 }
 
 func plainOccurences(s string) []int {
-	vals := bag(s)
+	vals := shared.Counts([]rune(s))
 	counts := make([]int, 0, len(vals))
 	for _, v := range vals {
 		counts = append(counts, v)
@@ -70,7 +70,7 @@ func plainOccurences(s string) []int {
 }
 
 func withJokers(s string) []int {
-	vals := bag(s)
+	vals := shared.Counts([]rune(s))
 	counts := make([]int, 0, len(vals))
 	for k, v := range vals {
 		if k != 'J' {

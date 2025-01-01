@@ -2,7 +2,6 @@ package y2023
 
 import (
 	"adventofcode/shared"
-	"fmt"
 	"strings"
 )
 
@@ -20,7 +19,6 @@ func Day08(input []string) (solution shared.Solution[int, int]) {
 			paths = append(paths, stepsUntilTarget(k, "Z", dirs, network))
 		}
 	}
-	fmt.Println(paths)
 	solution.Part2 = shared.LCM(paths...)
 	return
 }

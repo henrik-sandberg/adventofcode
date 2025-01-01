@@ -1,5 +1,14 @@
 package shared
 
+// Returns the count of elements in s as a map
+func Counts[T comparable](s []T) map[T]int {
+	m := map[T]int{}
+	for _, v := range s {
+		m[v]++
+	}
+	return m
+}
+
 // Returns the count of e in s
 func Count[T comparable](s []T, e T) (res int) {
 	for _, v := range s {

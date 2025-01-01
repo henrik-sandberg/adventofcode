@@ -2,19 +2,13 @@ package y2023
 
 import (
 	"adventofcode/shared"
-	"strconv"
 	"strings"
 )
 
 func Day09(input []string) (solution shared.Solution[int, int]) {
 	for _, line := range input {
-		numbers := strings.Fields(line)
-		ns := make([]int, len(numbers))
-		for i := range numbers {
-			n, _ := strconv.Atoi(numbers[i])
-			ns[i] = n
-		}
-		a, b := nextPolynomial(ns)
+		numbers := shared.IntSlice(strings.Fields(line))
+		a, b := nextPolynomial(numbers)
 		solution.Part1 += b
 		solution.Part2 += a
 	}
