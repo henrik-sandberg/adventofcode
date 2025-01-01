@@ -2,6 +2,7 @@ package y2023
 
 import (
 	"adventofcode/shared"
+	"log"
 )
 
 func Run(day string) {
@@ -20,7 +21,11 @@ func Run(day string) {
 		shared.Run(Day08)
 	case "09":
 		shared.Run(Day09)
+	case "10":
+		shared.Run(Day10)
 	case "15":
 		shared.Run(Day15)
+	default:
+		log.Fatalln("Solution for day", day, "not implemented.")
 	}
 }
