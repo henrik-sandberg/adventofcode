@@ -2,17 +2,18 @@ package y2023
 
 import (
 	"adventofcode/shared"
+	"slices"
+	"strings"
 )
 
 func Day10(input []string) (solution shared.Solution[int, int]) {
 	grid := shared.NewGrid(input)
 	findLoop := func(start complex64, direction complex64) []complex64 {
-		path := []complex64{}
+		path := []complex64{start}
 		next := start + direction
-		direction = pipeDirection(direction, grid[next])
 		for next != next+direction && next != start {
-			next, direction = next+direction, pipeDirection(direction, grid[next+direction])
 			path = append(path, next)
+			next, direction = next+direction, pipeDirection(direction, grid[next+direction])
 		}
 		return path
 	}
@@ -24,6 +25,24 @@ func Day10(input []string) (solution shared.Solution[int, int]) {
 		}
 	}
 	solution.Part1 = (len(loop) + 1) / 2
+	for c, row := range input {
+		in := false
+		previousturn := ' '
+		for r, v := range row {
+			if slices.Contains(loop, complex(float32(r), float32(c))) {
+				if v == '|' ||
+					v == '7' && previousturn == 'L' ||
+					v == 'J' && previousturn == 'F' {
+					in = !in
+				}
+				if strings.ContainsRune("7LJF", v) {
+					previousturn = v
+				}
+			} else if in {
+				solution.Part2++
+			}
+		}
+	}
 	return
 }
 
