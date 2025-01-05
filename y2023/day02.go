@@ -45,7 +45,7 @@ func parseGame(raw string) []map[string]int {
 	for _, sample := range strings.Split(strings.SplitN(raw, ": ", 2)[1], "; ") {
 		drawnCubes := map[string]int{}
 		for _, cubes := range strings.Split(sample, ", ") {
-			cube := strings.Split(cubes, " ")
+			cube := strings.Fields(cubes)
 			drawnCubes[cube[1]], _ = strconv.Atoi(cube[0])
 		}
 		samples = append(samples, drawnCubes)
