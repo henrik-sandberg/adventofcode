@@ -9,15 +9,15 @@ import (
 func Day12(input []string) (solution shared.Solution[int, int]) {
 	solver := func(chars []byte, groups []int) int {
 		type State struct {
-			GroupIndex int
-			GroupCount int
-			RequireDot bool
+			GroupIndex     int
+			GroupCount     int
+			RequireWorking bool
 		}
-		states := map[State]int{{0, 0, false}: 1}
+		states := map[State]int{{}: 1}
 		for _, char := range chars {
 			newstates := map[State]int{}
 			for state, val := range states {
-				if (char == '#' || char == '?') && state.GroupIndex < len(groups) && !state.RequireDot {
+				if (char == '#' || char == '?') && state.GroupIndex < len(groups) && !state.RequireWorking {
 					if char == '?' && state.GroupCount == 0 {
 						newstates[state] += val
 					}
@@ -27,7 +27,7 @@ func Day12(input []string) (solution shared.Solution[int, int]) {
 					}
 					newstates[state] += val
 				} else if (char == '.' || char == '?') && state.GroupCount == 0 {
-					state.RequireDot = false
+					state.RequireWorking = false
 					newstates[state] += val
 				}
 			}
@@ -48,7 +48,7 @@ func Day12(input []string) (solution shared.Solution[int, int]) {
 			[]byte(tmp[0]),
 			groups,
 		)
-		records := strings.Join(slices.Repeat([]string{tmp[0]}, 5), "?")
+		records := strings.Join(slices.Repeat(tmp[:1], 5), "?")
 		solution.Part2 += solver(
 			[]byte(records),
 			slices.Repeat(groups, 5),
