@@ -46,10 +46,10 @@ func Day10(input []string) (solution shared.Solution[int, int]) {
 	return
 }
 
-func pipeDirection(directionfrom complex64, r rune) complex64 {
+func pipeDirection(directionfrom complex64, b byte) complex64 {
 	switch directionfrom {
 	case -1i:
-		switch r {
+		switch b {
 		case '|':
 			return -1i
 		case '7':
@@ -58,7 +58,7 @@ func pipeDirection(directionfrom complex64, r rune) complex64 {
 			return 1
 		}
 	case 1i:
-		switch r {
+		switch b {
 		case '|':
 			return 1i
 		case 'J':
@@ -67,7 +67,7 @@ func pipeDirection(directionfrom complex64, r rune) complex64 {
 			return 1
 		}
 	case 1:
-		switch r {
+		switch b {
 		case '-':
 			return 1
 		case '7':
@@ -76,7 +76,7 @@ func pipeDirection(directionfrom complex64, r rune) complex64 {
 			return -1i
 		}
 	case -1:
-		switch r {
+		switch b {
 		case '-':
 			return -1
 		case 'L':

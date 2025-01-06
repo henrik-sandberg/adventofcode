@@ -5,7 +5,7 @@ import (
 	"testing"
 )
 
-func TestDay13(t *testing.T) {
+func TestDay11(t *testing.T) {
 	sampleInput := strings.Split(strings.TrimSpace(`
 ...#......
 .......#..

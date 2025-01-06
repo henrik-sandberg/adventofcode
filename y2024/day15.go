@@ -9,12 +9,11 @@ import (
 func Day15(input []string) (solution shared.Solution[int, int]) {
 	splitindex := slices.Index(input, "")
 	moves := strings.Join(input[splitindex:], "")
-	setup := func() (map[complex64]rune, complex64) {
+	setup := func() (shared.Grid, complex64) {
 		grid := shared.NewGrid(input)
 		bot := grid.FindAny('@')
-		m := grid
-		m[bot] = '.'
-		return m, bot
+		grid[bot] = '.'
+		return grid, bot
 	}
 	m, bot := setup()
 	solution.Part1 = day15_sovler(m, bot, moves)
@@ -29,7 +28,7 @@ func Day15(input []string) (solution shared.Solution[int, int]) {
 	return
 }
 
-func day15_sovler(m map[complex64]rune, bot complex64, moves string) (res int) {
+func day15_sovler(m shared.Grid, bot complex64, moves string) (res int) {
 	directions := map[rune]complex64{'<': -1, '^': -1i, '>': 1, 'v': 1i}
 moveloop:
 	for _, move := range moves {

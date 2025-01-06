@@ -33,7 +33,7 @@ func Day11(input []string) (solution shared.Solution[int, int]) {
 		}
 		grid := shared.Grid{}
 		for ri, row := range input {
-			for ci, cell := range row {
+			for ci, cell := range []byte(row) {
 				if cell == '#' {
 					grid[complex(float32(ci+coladjust[ci]), float32(ri+rowadjust[ri]))] = cell
 				}

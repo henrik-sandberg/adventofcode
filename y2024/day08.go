@@ -7,7 +7,7 @@ import (
 
 func Day08(input []string) (solution shared.Solution[int, int]) {
 	grid := shared.NewGrid(input)
-	frequencies := shared.RuneBag(strings.Join(input, ""))
+	frequencies := shared.Counts([]byte(strings.Join(input, "")))
 	delete(frequencies, '.')
 	solver := func(from, to int) (res int) {
 		antinodes := map[complex64]bool{}

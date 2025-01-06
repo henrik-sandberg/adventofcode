@@ -1,35 +1,35 @@
 package shared
 
-type Grid map[complex64]rune
+type Grid map[complex64]byte
 
-func (g *Grid) FindAny(r rune) complex64 {
+func (g *Grid) FindAny(b byte) complex64 {
 	for k, v := range *g {
-		if v == r {
+		if v == b {
 			return k
 		}
 	}
 	return 0
 }
 
-func (g *Grid) FindAll(r rune) []complex64 {
+func (g *Grid) FindAll(b byte) []complex64 {
 	res := []complex64{}
 	for k, v := range *g {
-		if v == r {
+		if v == b {
 			res = append(res, k)
 		}
 	}
 	return res
 }
 
-func (g *Grid) Get(x, y int) rune {
+func (g *Grid) Get(x, y int) byte {
 	return (*g)[complex(float32(x), float32(y))]
 }
 
 func NewGrid(arr []string) Grid {
-	ret := make(map[complex64]rune, len(arr)*len(arr[0]))
+	ret := make(map[complex64]byte, len(arr)*len(arr[0]))
 	for ri, row := range arr {
-		for ci, cell := range row {
-			ret[complex(float32(ci), float32(ri))] = cell
+		for ci, byt := range []byte(row) {
+			ret[complex(float32(ci), float32(ri))] = byt
 		}
 	}
 	return ret

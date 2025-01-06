@@ -28,7 +28,7 @@ func Day04(input []string) (solution shared.Solution[int, int]) {
 	}
 	grid := shared.NewGrid(input)
 	for _, a := range grid.FindAll('A') {
-		ns := []rune{
+		ns := []byte{
 			grid[a-1-1i],
 			grid[a+1-1i],
 			grid[a-1+1i],

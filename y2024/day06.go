@@ -32,7 +32,7 @@ func Day06(input []string) (solution shared.Solution[int, int]) {
 	return
 }
 
-func findPath(grid map[complex64]rune, g guard) (map[guard]bool, error) {
+func findPath(grid map[complex64]byte, g guard) (map[guard]bool, error) {
 	visited := make(map[guard]bool, len(grid))
 	for !visited[g] {
 		visited[g] = true
