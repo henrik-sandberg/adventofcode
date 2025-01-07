@@ -31,6 +31,8 @@ func Run(day string) {
 		shared.Run(Day11)
 	case "12":
 		shared.Run(Day12)
+	case "13":
+		shared.Run(Day13)
 	case "15":
 		shared.Run(Day15)
 	default:

@@ -10,7 +10,7 @@ func TestDay17(t *testing.T) {
 
 	`), "\n")
 
-	res := Day13(sampleInput)
+	res := Day17(sampleInput)
 
 	if expected := 0; expected != res.Part1 {
 		t.Errorf("part1: expected %d, got %d", expected, res.Part1)
