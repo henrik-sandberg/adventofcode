@@ -37,6 +37,8 @@ func Run(day string) {
 		shared.Run(Day14)
 	case "15":
 		shared.Run(Day15)
+	case "17":
+		shared.Run(Day17)
 	default:
 		log.Fatalln("Solution for day", day, "not implemented.")
 	}

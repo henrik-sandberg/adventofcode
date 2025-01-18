@@ -49,7 +49,7 @@ func Day15(input []string) (solution shared.Solution[int, int]) {
 func hash(s string) int {
 	h := 0
 	for _, c := range s {
-		h = (h + int(c)) * 17 % 256
+		h = (h + int(c)) * 17 & 0xFF
 	}
 	return h
 }

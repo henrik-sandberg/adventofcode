@@ -21,10 +21,6 @@ func (g *Grid) FindAll(b byte) []complex64 {
 	return res
 }
 
-func (g *Grid) Get(x, y int) byte {
-	return (*g)[complex(float32(x), float32(y))]
-}
-
 func NewGrid(arr []string) Grid {
 	ret := make(map[complex64]byte, len(arr)*len(arr[0]))
 	for ri, row := range arr {
