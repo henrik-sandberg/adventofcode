@@ -7,11 +7,11 @@ import (
 
 func Day17(input []string) (solution shared.Solution[int, int]) {
 	grid := shared.NewGrid(input)
-	target := complex(float32(len(input[0])-1), float32(len(input)-1))
+	target := complex(float64(len(input[0])-1), float64(len(input)-1))
 	solver := func(minSteps, maxSteps int) int {
 		type position struct {
-			tile      complex64
-			direction complex64
+			tile      complex128
+			direction complex128
 		}
 		pq := &shared.PriorityQueue[position]{}
 		heap.Push(pq, &shared.Item[position]{Value: position{tile: 0, direction: 1}, Priority: 0})
@@ -27,16 +27,16 @@ func Day17(input []string) (solution shared.Solution[int, int]) {
 				continue
 			}
 			seen[pos] = true
-			for _, turn := range []complex64{1i, -1i} {
+			for _, turn := range []complex128{1i, -1i} {
 				dir := pos.direction * turn
 				for k := minSteps; k <= maxSteps; k++ {
-					next := pos.tile + dir*complex(float32(k), 0)
+					next := pos.tile + dir*complex(float64(k), 0)
 					if _, ok := grid[next]; !ok {
 						break
 					}
 					cost := item.Priority
 					for step := 1; step <= k; step++ {
-						cost += int(grid[pos.tile+dir*complex(float32(step), 0)] - '0')
+						cost += int(grid[pos.tile+dir*complex(float64(step), 0)] - '0')
 					}
 					heap.Push(pq, &shared.Item[position]{Value: position{next, dir}, Priority: cost})
 				}

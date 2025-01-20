@@ -9,7 +9,7 @@ import (
 func Day15(input []string) (solution shared.Solution[int, int]) {
 	splitindex := slices.Index(input, "")
 	moves := strings.Join(input[splitindex:], "")
-	setup := func() (shared.Grid, complex64) {
+	setup := func() (shared.Grid, complex128) {
 		grid := shared.NewGrid(input)
 		bot := grid.FindAny('@')
 		grid[bot] = '.'
@@ -28,14 +28,14 @@ func Day15(input []string) (solution shared.Solution[int, int]) {
 	return
 }
 
-func day15_sovler(m shared.Grid, bot complex64, moves string) (res int) {
-	directions := map[rune]complex64{'<': -1, '^': -1i, '>': 1, 'v': 1i}
+func day15_sovler(m shared.Grid, bot complex128, moves string) (res int) {
+	directions := map[rune]complex128{'<': -1, '^': -1i, '>': 1, 'v': 1i}
 moveloop:
 	for _, move := range moves {
 		dir := directions[move]
 		pointer := bot
-		tiles := []complex64{pointer}
-		seen := []complex64{pointer}
+		tiles := []complex128{pointer}
+		seen := []complex128{pointer}
 		for len(tiles) > 0 {
 			pointer, tiles = tiles[0], tiles[1:]
 			if !slices.Contains(seen, pointer) {

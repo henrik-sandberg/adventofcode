@@ -6,12 +6,12 @@ import (
 
 func Day12(input []string) (solution shared.Solution[int, int]) {
 	grid := shared.NewGrid(input)
-	seen := map[complex64]bool{}
+	seen := map[complex128]bool{}
 	for point := range grid {
 		if !seen[point] {
 			seen[point] = true
-			area := map[complex64]int{point: 0}
-			queue := []complex64{point}
+			area := map[complex128]int{point: 0}
+			queue := []complex128{point}
 			for len(queue) > 0 {
 				point, queue = queue[0], queue[1:]
 				for _, dir := range grid.Directions() {

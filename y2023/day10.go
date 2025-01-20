@@ -8,8 +8,8 @@ import (
 
 func Day10(input []string) (solution shared.Solution[int, int]) {
 	grid := shared.NewGrid(input)
-	findLoop := func(start complex64, direction complex64) []complex64 {
-		path := []complex64{start}
+	findLoop := func(start complex128, direction complex128) []complex128 {
+		path := []complex128{start}
 		next := start + direction
 		for next != next+direction && next != start {
 			path = append(path, next)
@@ -17,7 +17,7 @@ func Day10(input []string) (solution shared.Solution[int, int]) {
 		}
 		return path
 	}
-	loop := []complex64{}
+	loop := []complex128{}
 	start := grid.FindAny('S')
 	for _, dir := range grid.Directions() {
 		if lp := findLoop(start, dir); len(lp) > len(loop) {
@@ -29,7 +29,7 @@ func Day10(input []string) (solution shared.Solution[int, int]) {
 		in := false
 		previousturn := ' '
 		for r, v := range row {
-			if slices.Contains(loop, complex(float32(r), float32(c))) {
+			if slices.Contains(loop, complex(float64(r), float64(c))) {
 				if v == '|' ||
 					v == '7' && previousturn == 'L' ||
 					v == 'J' && previousturn == 'F' {
@@ -46,7 +46,7 @@ func Day10(input []string) (solution shared.Solution[int, int]) {
 	return
 }
 
-func pipeDirection(directionfrom complex64, b byte) complex64 {
+func pipeDirection(directionfrom complex128, b byte) complex128 {
 	switch directionfrom {
 	case -1i:
 		switch b {

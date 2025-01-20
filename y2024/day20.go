@@ -12,7 +12,7 @@ func day20Solver(input []string, limit int) (solution shared.Solution[int, int])
 	grid := shared.NewGrid(input)
 	start := grid.FindAny('S')
 	target := grid.FindAny('E')
-	arr := []complex64{start}
+	arr := []complex128{start}
 	for arr[len(arr)-1] != target {
 		for _, dir := range grid.Directions() {
 			next := arr[len(arr)-1] + dir
@@ -22,7 +22,7 @@ func day20Solver(input []string, limit int) (solution shared.Solution[int, int])
 			}
 		}
 	}
-	manhattan := func(a, b complex64) int {
+	manhattan := func(a, b complex128) int {
 		return shared.Abs(int(real(a)-real(b))) + shared.Abs(int(imag(a)-imag(b)))
 	}
 	for i, first := range arr {

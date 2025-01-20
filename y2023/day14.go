@@ -8,9 +8,9 @@ import (
 
 func Day14(input []string) (solution shared.Solution[int, int]) {
 	grid := shared.NewGrid(input)
-	roll := func(dir complex64) int {
+	roll := func(dir complex128) int {
 		rocks := grid.FindAll('O')
-		slices.SortFunc(rocks, func(a, b complex64) int {
+		slices.SortFunc(rocks, func(a, b complex128) int {
 			switch {
 			case real(dir) > 0:
 				return int(real(b) - real(a))
@@ -48,7 +48,7 @@ func Day14(input []string) (solution shared.Solution[int, int]) {
 	seen := map[string]int{}
 	scores := []int{}
 	for cycle := 0; ; cycle++ {
-		for _, dir := range []complex64{grid.Up(), grid.Left(), grid.Down(), grid.Right()} {
+		for _, dir := range []complex128{grid.Up(), grid.Left(), grid.Down(), grid.Right()} {
 			for roll(dir) != 0 {
 			}
 		}

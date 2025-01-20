@@ -10,9 +10,9 @@ func Day08(input []string) (solution shared.Solution[int, int]) {
 	frequencies := shared.Counts([]byte(strings.Join(input, "")))
 	delete(frequencies, '.')
 	solver := func(from, to int) (res int) {
-		antinodes := map[complex64]bool{}
+		antinodes := map[complex128]bool{}
 		for freq := range frequencies {
-			towers := []complex64{}
+			towers := []complex128{}
 			for k, v := range grid {
 				if v == freq {
 					towers = append(towers, k)
@@ -21,7 +21,7 @@ func Day08(input []string) (solution shared.Solution[int, int]) {
 			for nums := range shared.Permutations(towers, 2) {
 				a, b := nums[0], nums[1]
 				for i := from; i < to; i++ {
-					n := complex(float32(i), 0)
+					n := complex(float64(i), 0)
 					antinodes[a+n*(a-b)] = true
 				}
 			}

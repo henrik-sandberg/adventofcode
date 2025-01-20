@@ -9,21 +9,21 @@ import (
 func Day16(input []string) (solution shared.Solution[int, int]) {
 	m := shared.NewGrid(input)
 	type pathkey struct {
-		position  complex64
-		direction complex64
+		position  complex128
+		direction complex128
 	}
 	start := m.FindAny('S')
 	target := m.FindAny('E')
 	m[start], m[target] = '.', '.'
 	best := math.MaxInt
 	dist := map[pathkey]int{{start, 1}: 0}
-	seen := map[complex64]bool{start: true}
+	seen := map[complex128]bool{start: true}
 	pq := &shared.PriorityQueue[reindeer]{}
 	heap.Init(pq)
 	enqueue := func(r reindeer) {
 		heap.Push(pq, &shared.Item[reindeer]{Value: r, Priority: r.cost})
 	}
-	enqueue(reindeer{start, 1, 0, map[complex64]bool{start: true}})
+	enqueue(reindeer{start, 1, 0, map[complex128]bool{start: true}})
 	for pq.Len() > 0 {
 		current := heap.Pop(pq).(*shared.Item[reindeer]).Value
 		key := pathkey{current.position, current.direction}
@@ -38,7 +38,7 @@ func Day16(input []string) (solution shared.Solution[int, int]) {
 			best = current.cost
 		}
 		for _, change := range []struct {
-			dir  complex64
+			dir  complex128
 			cost int
 		}{{1, 1}, {-1i, 1001}, {1i, 1001}} {
 			dir := current.direction * change.dir
@@ -48,7 +48,7 @@ func Day16(input []string) (solution shared.Solution[int, int]) {
 				continue
 			}
 			if m[next] == '.' {
-				p := make(map[complex64]bool, len(current.seen)+1)
+				p := make(map[complex128]bool, len(current.seen)+1)
 				for k, v := range current.seen {
 					p[k] = v
 				}
@@ -63,8 +63,8 @@ func Day16(input []string) (solution shared.Solution[int, int]) {
 }
 
 type reindeer struct {
-	position  complex64
-	direction complex64
+	position  complex128
+	direction complex128
 	cost      int
-	seen      map[complex64]bool
+	seen      map[complex128]bool
 }

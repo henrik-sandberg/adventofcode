@@ -8,24 +8,24 @@ import (
 func Day18(input []string) (solution shared.Solution[int, string]) {
 	iterations := 1024
 	size := 71
-	target := complex64(70 + 70i)
-	m := map[complex64]rune{}
+	target := complex128(70 + 70i)
+	m := map[complex128]rune{}
 	for r := 0; r < size; r++ {
 		for c := 0; c < size; c++ {
-			m[complex(float32(c), float32(r))] = '.'
+			m[complex(float64(c), float64(r))] = '.'
 		}
 	}
 	dropByte := func(point string) {
 		i := shared.IntSlice(strings.Split(point, ","))
-		m[complex(float32(i[0]), float32(i[1]))] = '#'
+		m[complex(float64(i[0]), float64(i[1]))] = '#'
 	}
 	bfs := func() int {
-		current := complex64(0)
-		queue := []complex64{current}
-		seen := map[complex64]int{current: 0}
+		current := complex128(0)
+		queue := []complex128{current}
+		seen := map[complex128]int{current: 0}
 		for len(queue) > 0 {
 			current, queue = queue[0], queue[1:]
-			for _, dir := range []complex64{-1i, 1, 1i, -1} {
+			for _, dir := range []complex128{-1i, 1, 1i, -1} {
 				next := current + dir
 				if next == target {
 					return seen[current] + 1

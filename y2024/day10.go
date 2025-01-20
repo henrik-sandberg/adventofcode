@@ -8,8 +8,8 @@ func Day10(input []string) (solution shared.Solution[int, int]) {
 	grid := shared.NewGrid(input)
 	solver := func(distinctTrails bool) (res int) {
 		for _, point := range grid.FindAll('0') {
-			seen := map[complex64]bool{}
-			queue := []complex64{point}
+			seen := map[complex128]bool{}
+			queue := []complex128{point}
 			for len(queue) > 0 {
 				point, queue = queue[0], queue[1:]
 				for _, dir := range grid.Directions() {

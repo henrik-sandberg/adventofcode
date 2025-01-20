@@ -6,7 +6,7 @@ import (
 )
 
 type guard struct {
-	location, direction complex64
+	location, direction complex128
 }
 
 func Day06(input []string) (solution shared.Solution[int, int]) {
@@ -16,7 +16,7 @@ func Day06(input []string) (solution shared.Solution[int, int]) {
 		direction: -1i,
 	}
 	path, _ := findPath(grid, start)
-	unique := make(map[complex64]bool)
+	unique := make(map[complex128]bool)
 	for k := range path {
 		unique[k.location] = true
 	}
@@ -32,7 +32,7 @@ func Day06(input []string) (solution shared.Solution[int, int]) {
 	return
 }
 
-func findPath(grid map[complex64]byte, g guard) (map[guard]bool, error) {
+func findPath(grid map[complex128]byte, g guard) (map[guard]bool, error) {
 	visited := make(map[guard]bool, len(grid))
 	for !visited[g] {
 		visited[g] = true
