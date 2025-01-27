@@ -2,6 +2,7 @@ package y2023
 
 import (
 	"adventofcode/shared"
+	"maps"
 	"slices"
 	"strings"
 )
@@ -43,14 +44,12 @@ type conjunction struct {
 }
 
 func (b *button) press() {
-	//fmt.Println("id: button sending pulse false to broadcaster")
 	(*b.pulses)[false]++
 	(*b.queue) = append(*b.queue, func() { (*b.modules)["broadcaster"].send(false, "button") })
 }
 
 func (b *broadcaster) send(pulse bool, id string) {
 	for _, out := range b.output {
-		//fmt.Printf("id: %s sending pulse %v to %v\n", b.id, pulse, out)
 		(*b.pulses)[pulse]++
 		(*b.queue) = append(*b.queue, func() { (*b.modules)[out].send(pulse, b.id) })
 	}
@@ -60,7 +59,6 @@ func (f *flipflop) send(pulse bool, id string) {
 	if !pulse {
 		f.on = !f.on
 		for _, out := range f.output {
-			//fmt.Printf("id: %s sending pulse %v to %v\n", f.id, f.on, out)
 			(*f.pulses)[f.on]++
 			if m, ok := (*f.modules)[out]; ok {
 				(*f.queue) = append(*f.queue, func() { m.send(f.on, f.id) })
@@ -77,7 +75,6 @@ func (c *conjunction) send(pulse bool, id string) {
 	}
 	for _, out := range c.output {
 		(*c.pulses)[!all]++
-		//fmt.Printf("id: %s sending pulse %v to %v\n", c.id, !all, out)
 		if m, ok := (*c.modules)[out]; ok {
 			(*c.queue) = append(*c.queue, func() { m.send(!all, c.id) })
 		}
@@ -108,17 +105,31 @@ func Day20(input []string) (solution shared.Solution[int, int]) {
 				if ok && slices.Contains(f.output, con.id) {
 					con.input[f.id] = false
 				}
+				c, ok := m.(*conjunction)
+				if ok && slices.Contains(c.output, con.id) {
+					con.input[c.id] = false
+				}
 			}
 		}
 	}
 	button := button{queue: &queue, modules: &modules, pulses: &pulses}
-	for i := 0; i < 1e3; i++ {
+	inpt := modules["cl"].(*conjunction).input
+	cycles := map[string]int{}
+	for i := 1; len(cycles) != len(inpt); i++ {
 		button.press()
 		for len(queue) > 0 {
 			queue[0]()
 			queue = queue[1:]
+			for k, v := range inpt {
+				if _, ok := cycles[k]; !ok && v {
+					cycles[k] = i
+				}
+			}
+		}
+		if i == 1000 {
+			solution.Part1 = pulses[true] * pulses[false]
 		}
 	}
-	solution.Part1 = pulses[true] * pulses[false]
+	solution.Part2 = shared.Product(slices.Collect(maps.Values(cycles))...)
 	return
 }
