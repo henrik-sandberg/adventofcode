@@ -113,23 +113,31 @@ func Day20(input []string) (solution shared.Solution[int, int]) {
 		}
 	}
 	button := button{queue: &queue, modules: &modules, pulses: &pulses}
-	inpt := modules["cl"].(*conjunction).input
-	cycles := map[string]int{}
-	for i := 1; len(cycles) != len(inpt); i++ {
+	i := 1
+	for ; i <= 1000; i++ {
 		button.press()
 		for len(queue) > 0 {
 			queue[0]()
 			queue = queue[1:]
-			for k, v := range inpt {
-				if _, ok := cycles[k]; !ok && v {
-					cycles[k] = i
+		}
+	}
+	solution.Part1 = pulses[true] * pulses[false]
+	if mod, ok := modules["cl"]; ok {
+		cycles := map[string]int{}
+		inpt := mod.(*conjunction).input
+		for ; len(cycles) != len(inpt); i++ {
+			button.press()
+			for len(queue) > 0 {
+				queue[0]()
+				queue = queue[1:]
+				for k, v := range inpt {
+					if _, ok := cycles[k]; !ok && v {
+						cycles[k] = i
+					}
 				}
 			}
 		}
-		if i == 1000 {
-			solution.Part1 = pulses[true] * pulses[false]
-		}
+		solution.Part2 = shared.Product(slices.Collect(maps.Values(cycles))...)
 	}
-	solution.Part2 = shared.Product(slices.Collect(maps.Values(cycles))...)
 	return
 }
