@@ -7,11 +7,6 @@ import (
 	"time"
 )
 
-type Solution[T1, T2 any] struct {
-	Part1 T1
-	Part2 T2
-}
-
 // Run executes the given solution function with the provided input and writes the output to the specified writer.
 func Run[T1, T2 any](f func([]string) Solution[T1, T2], inputReader io.Reader, outputWriter io.Writer) error {
 	input, err := readLines(inputReader)

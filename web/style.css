@@ -30,6 +30,8 @@ h1, h2, h3 {
 .output-section h3 {
     text-align: left;
     margin: 0 0 10px 0; /* Explicitly control margins */
+    font-size: 1.17em; /* Set explicitly for consistency */
+    line-height: 1.5; /* Set explicitly for consistency */
 }
 
 /* Style for the label to match h3 and align left */
@@ -39,6 +41,7 @@ h1, h2, h3 {
     font-size: 1.17em; /* Approximate h3 size */
     font-weight: bold; /* Approximate h3 weight */
     margin: 0 0 10px 0; /* Explicitly control margins */
+    line-height: 1.5; /* Set explicitly for consistency */
 }
 
 
