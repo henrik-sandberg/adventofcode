@@ -1,7 +1,7 @@
 package y2024
 
 import (
-	"adventofcode/shared"
+	"adventofcode/solutions/shared"
 	"slices"
 	"strings"
 )
@@ -14,7 +14,7 @@ func Day02(input []string) (solution shared.Solution[int, int]) {
 			solution.Part2++
 		} else {
 			for ind := range nums {
-				oneDropped := append([]int{}, nums[:ind]...)
+				oneDropped := slices.Clone(nums[:ind])
 				oneDropped = append(oneDropped, nums[ind+1:]...)
 				if isSafeLevel(oneDropped) {
 					solution.Part2++

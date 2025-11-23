@@ -1,7 +1,7 @@
 package y2023
 
 import (
-	"adventofcode/shared"
+	"adventofcode/solutions/shared"
 	"math"
 	"strings"
 )

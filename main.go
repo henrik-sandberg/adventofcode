@@ -1,11 +1,6 @@
 package main
 
 import (
-	"adventofcode/shared"
-	"adventofcode/solutions/y2022"
-	"adventofcode/solutions/y2023"
-	"adventofcode/solutions/y2024"
-	"adventofcode/solutions/y2025"
 	"encoding/json"
 	"flag"
 	"fmt"
@@ -14,24 +9,17 @@ import (
 	"net/http"
 	"os"
 	"path/filepath"
-	"sort"
 	"strings"
+
+	"adventofcode/solutions"
+	"adventofcode/solutions/shared"
 )
 
 var (
 	yearFlag = flag.Int("year", 0, "Year of the Advent of Code puzzle (e.g., 2023)")
 	dayFlag  = flag.Int("day", 0, "Day of the Advent of Code puzzle (1-25)")
 	webFlag  = flag.Bool("web", false, "Start the web interface")
-
-	allSolutions = make(map[string]map[string]func([]string) shared.Solution[any, any])
 )
-
-func init() {
-	allSolutions["2022"] = y2022.Solutions
-	allSolutions["2023"] = y2023.Solutions
-	allSolutions["2024"] = y2024.Solutions
-	allSolutions["2025"] = y2025.Solutions
-}
 
 func main() {
 	flag.Parse()
@@ -51,16 +39,13 @@ func main() {
 	yearStr := fmt.Sprintf("%d", *yearFlag)
 	dayStr := fmt.Sprintf("%02d", *dayFlag)
 
-	if solvers, ok := allSolutions[yearStr]; ok {
-		if solver, ok := solvers[dayStr]; ok {
-			if err := shared.Run(solver, os.Stdin, os.Stdout); err != nil {
-				log.Fatalf("Error running solution: %v", err)
-			}
-		} else {
-			log.Fatalf("Solution for day %s in year %s not found.", dayStr, yearStr)
-		}
-	} else {
-		log.Fatalf("Solutions for year %s not found.", yearStr)
+	solver, ok := solutions.GetSolution(yearStr, dayStr)
+	if !ok {
+		log.Fatalf("Solution for day %s in year %s not found.", dayStr, yearStr)
+	}
+
+	if err := shared.Run(solver, os.Stdin, os.Stdout); err != nil {
+		log.Fatalf("Error running solution: %v", err)
 	}
 }
 
@@ -68,7 +53,6 @@ func startWebServer() {
 	fmt.Println("Starting web server on :8080...")
 	mux := http.NewServeMux()
 
-	// Static file handling
 	mux.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		if r.URL.Path == "/" {
 			http.ServeFile(w, r, filepath.Join("web", "index.html"))
@@ -81,7 +65,6 @@ func startWebServer() {
 		http.NotFound(w, r)
 	})
 
-	// API routes
 	mux.HandleFunc("GET /api/years", getYearsHandler)
 	mux.HandleFunc("GET /api/years/{year}/days", getDaysHandler)
 	mux.HandleFunc("POST /api/years/{year}/days/{day}", solveProblemHandler)
@@ -90,34 +73,25 @@ func startWebServer() {
 }
 
 func getYearsHandler(w http.ResponseWriter, r *http.Request) {
-	var years []string
-	for year := range allSolutions {
-		years = append(years, year)
-	}
-	sort.Strings(years)
-
+	years := solutions.AvailableYears()
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(years)
 }
 
 func getDaysHandler(w http.ResponseWriter, r *http.Request) {
-	year := r.PathValue("year")
-	if days, ok := allSolutions[year]; ok {
-		var dayKeys []string
-		for day := range days {
-			dayKeys = append(dayKeys, day)
-		}
-		sort.Strings(dayKeys)
-		w.Header().Set("Content-Type", "application/json")
-		json.NewEncoder(w).Encode(dayKeys)
-	} else {
-		http.Error(w, fmt.Sprintf("Year %s not found or no solutions available.", year), http.StatusNotFound)
+	yearStr := r.PathValue("year")
+	days := solutions.AvailableDays(yearStr)
+	if len(days) == 0 {
+		http.Error(w, fmt.Sprintf("Year %s not found or no solutions available.", yearStr), http.StatusNotFound)
+		return
 	}
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(days)
 }
 
 func solveProblemHandler(w http.ResponseWriter, r *http.Request) {
-	year := r.PathValue("year")
-	day := r.PathValue("day")
+	yearStr := r.PathValue("year")
+	dayStr := r.PathValue("day")
 
 	body, err := io.ReadAll(r.Body)
 	if err != nil {
@@ -126,9 +100,9 @@ func solveProblemHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	inputReader := strings.NewReader(string(body))
 
-	solver, ok := allSolutions[year][day]
+	solver, ok := solutions.GetSolution(yearStr, dayStr)
 	if !ok {
-		http.Error(w, fmt.Sprintf("Solution for day %s in year %s not found.", day, year), http.StatusNotFound)
+		http.Error(w, fmt.Sprintf("Solution for day %s in year %s not found.", dayStr, yearStr), http.StatusNotFound)
 		return
 	}
 

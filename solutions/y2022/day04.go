@@ -1,7 +1,7 @@
 package y2022
 
 import (
-	"adventofcode/shared"
+	"adventofcode/solutions/shared"
 	"strconv"
 	"strings"
 )

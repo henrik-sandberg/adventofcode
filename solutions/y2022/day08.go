@@ -1,7 +1,7 @@
 package y2022
 
 import (
-	"adventofcode/shared"
+	"adventofcode/solutions/shared"
 )
 
 func Day08(input []string) (solution shared.Solution[int, int]) {

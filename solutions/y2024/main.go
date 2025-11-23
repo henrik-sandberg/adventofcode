@@ -1,11 +1,9 @@
 package y2024
 
 import (
-	"adventofcode/shared"
+	"adventofcode/solutions/shared"
 )
 
-// Solutions maps day numbers to their respective solution functions.
-// Each function takes []string input and returns a shared.Solution.
 var Solutions = map[string]func([]string) shared.Solution[any, any]{
 	"01": shared.WrapSolution(Day01),
 	"02": shared.WrapSolution(Day02),
