@@ -27,23 +27,19 @@ h1, h2, h3 {
 }
 
 /* Align h3 in output-section to the left */
+.input-section label,
 .output-section h3 {
-    text-align: left;
-    margin: 0 0 10px 0; /* Explicitly control margins */
-    font-size: 1.17em; /* Set explicitly for consistency */
-    line-height: 1.5; /* Set explicitly for consistency */
-}
-
-/* Style for the label to match h3 and align left */
-.input-section label {
+    /* Explicitly define styles for precise alignment */
+    display: block; /* Ensures consistent margin/padding application */
     color: #7aa2f7;
-    text-align: left;
-    font-size: 1.17em; /* Approximate h3 size */
-    font-weight: bold; /* Approximate h3 weight */
-    margin: 0 0 10px 0; /* Explicitly control margins */
-    line-height: 1.5; /* Set explicitly for consistency */
+    font-size: 1.17em; /* Consistent font size */
+    font-weight: bold;
+    line-height: 1.5; /* Consistent line height */
+    margin: 0; /* Remove all default margins */
+    padding: 0; /* Remove default padding */
+    margin-bottom: 10px; /* Consistent spacing below */
+    text-align: left; /* Ensure left alignment */
 }
-
 
 .list-view, .solver-view {
     margin-top: 20px;
@@ -123,14 +119,34 @@ button:disabled {
     background-color: #7fba53;
 }
 
+.solver-layout {
+    display: flex; /* Use flexbox for columns */
+    gap: 30px;
+}
+
+.solver-layout-left {
+    display: flex;
+    flex-direction: column;
+    flex-basis: 300px; /* Fixed narrow width for input column */
+    flex-shrink: 0; /* Prevent shrinking */
+}
+
+.solver-layout-right {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1; /* Allow to grow and fill remaining space */
+}
+
 .input-section {
     display: flex;
     flex-direction: column;
     gap: 10px;
+    flex-grow: 1; /* Allows textarea to grow */
 }
 
-textarea, pre, input[type="file"] {
-    box-sizing: border-box; /* Ensures padding/border are included in the width */
+textarea, input[type="file"] {
+    box-sizing: border-box;
+    width: 100%; /* Fill parent column */
 }
 
 textarea {
@@ -140,67 +156,15 @@ textarea {
     padding: 15px;
     border-radius: 5px;
     font-family: 'SF Mono', 'Fira Code', 'monospace', monospace;
-    width: 100%; /* Fill the parent column */
     resize: vertical;
-    flex-grow: 1;
+    flex-grow: 1; /* Allows textarea to grow */
     min-height: 200px;
 }
 
-.solver-layout {
-    display: grid;
-    /* Use a fixed, narrow column for input and a flexible one for output */
-    grid-template-columns: 300px 1fr;
-    gap: 30px;
-}
-
-.solver-layout-left {
-    display: flex;
-    flex-direction: column;
-}
-
-.solver-layout-left .input-section {
-    flex-grow: 1;
-    display: flex;
-    flex-direction: column;
-}
-
-.solver-layout-right {
-    display: flex;
-    flex-direction: column;
-}
-
 .output-section {
-    margin-top: 0;
-    border-top: none;
-    padding-top: 0;
     display: flex;
     flex-direction: column;
-    flex-grow: 1;
-}
-
-@media (max-width: 768px) {
-    .solver-layout {
-        grid-template-columns: 1fr;
-    }
-    .output-section {
-        margin-top: 20px;
-        border-top: 1px solid #565f89;
-        padding-top: 20px;
-    }
-}
-
-input[type="file"] {
-    border: 1px dashed #565f89;
-    padding: 8px;
-    border-radius: 5px;
-    background-color: #1f2335;
-    color: #c0caf5;
-    width: 100%; /* Fill the parent column */
-}
-
-.error-message {
-    color: #f7768e;
-    margin-top: 5px;
+    flex-grow: 1; /* Allow pre to grow */
 }
 
 pre {
@@ -210,14 +174,22 @@ pre {
     padding: 15px;
     border-radius: 5px;
     font-family: 'SF Mono', 'Fira Code', 'monospace', monospace;
-    width: 100%; /* Fill the parent column */
+    width: 100%; /* Fill parent column */
     white-space: pre-wrap;
     word-break: break-all;
-    overflow-wrap: break-word; /* Extra safeguard for long strings */
-    flex-grow: 1;
+    overflow-wrap: break-word;
+    flex-grow: 1; /* Allows pre to grow */
+    min-height: 200px;
 }
 
-
-.hidden {
-    display: none;
+@media (max-width: 768px) {
+    .solver-layout {
+        flex-direction: column; /* Stack columns */
+    }
+    .output-section {
+        margin-top: 20px;
+        border-top: 1px solid #565f89;
+        padding-top: 20px;
+    }
 }
+
