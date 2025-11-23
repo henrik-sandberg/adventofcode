@@ -32,7 +32,7 @@ func Intersect[T comparable](first, second []T) []T {
 	return ret
 }
 
-func Combinations[T interface{}](set []T, length int) <-chan []T {
+func Combinations[T any](set []T, length int) <-chan []T {
 	ch := make(chan []T)
 
 	go func() {
@@ -55,7 +55,7 @@ func Combinations[T interface{}](set []T, length int) <-chan []T {
 	return ch
 }
 
-func Permutations[T interface{}](set []T, length int) <-chan []T {
+func Permutations[T any](set []T, length int) <-chan []T {
 	ch := make(chan []T)
 	go func() {
 		defer close(ch)
@@ -69,7 +69,7 @@ func Permutations[T interface{}](set []T, length int) <-chan []T {
 				ch <- tmp
 				return
 			}
-			for i := 0; i < len(set); i++ {
+			for i := range set {
 				if !used[i] {
 					used[i] = true
 					temp[k] = set[i]

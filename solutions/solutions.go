@@ -2,6 +2,7 @@ package solutions
 
 import (
 	"adventofcode/solutions/shared"
+	"adventofcode/solutions/y2021"
 	"adventofcode/solutions/y2022"
 	"adventofcode/solutions/y2023"
 	"adventofcode/solutions/y2024"
@@ -19,6 +20,7 @@ type date struct {
 }
 
 func init() {
+	loadSolutions("2021", y2021.Solutions)
 	loadSolutions("2022", y2022.Solutions)
 	loadSolutions("2023", y2023.Solutions)
 	loadSolutions("2024", y2024.Solutions)

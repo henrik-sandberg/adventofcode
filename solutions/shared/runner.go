@@ -19,7 +19,7 @@ func Run[T1, T2 any](f func([]string) Solution[T1, T2], inputReader io.Reader, o
 
 	fmt.Fprintf(outputWriter, "Part1: %v\n", solution.Part1)
 	fmt.Fprintf(outputWriter, "Part2: %v\n", solution.Part2)
-	fmt.Fprintf(outputWriter, "Found solution in %d ms\n", elapsed.Milliseconds())
+	fmt.Fprintf(outputWriter, "Solver completed in %d ms\n", elapsed.Milliseconds())
 	return nil
 }
 

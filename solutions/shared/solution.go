@@ -8,8 +8,7 @@ type Solution[T1, T2 any] struct {
 }
 
 // WrapSolution wraps a specific solution function (e.g., one returning Solution[int, int])
-// into a generic one that returns Solution[any, any]. This avoids repetitive boilerplate
-// in the solution registration maps.
+// into a generic one that returns Solution[any, any].
 func WrapSolution[T1, T2 any](f func([]string) Solution[T1, T2]) func([]string) Solution[any, any] {
 	return func(input []string) Solution[any, any] {
 		sol := f(input)

@@ -113,7 +113,7 @@ document.addEventListener("DOMContentLoaded", () => {
   async function solvePuzzle() {
     const textInput = puzzleInputTextarea.value;
     const file = fileInput.files[0];
-    inputError.textContent = ""; // Clear previous error
+    inputError.textContent = "";
 
     if (textInput && file) {
       inputError.textContent =

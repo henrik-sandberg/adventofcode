@@ -81,7 +81,7 @@ h3 {
   margin-top: 15px;
 }
 
-#days-buttons {
+#days-buttons, #years-buttons {
   display: grid;
   grid-template-columns: repeat(5, 1fr);
 }
