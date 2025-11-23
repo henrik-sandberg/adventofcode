@@ -22,7 +22,6 @@ body {
   overflow: hidden;
 }
 
-/* --- Animation Classes --- */
 .view {
   display: none;
   animation: fadeIn 0.5s ease-in-out;
@@ -107,7 +106,31 @@ button:disabled {
   border: 1px dashed #565f89;
 }
 
-/* --- Tooltip --- */
+.spinner {
+  border: 4px solid rgba(0, 0, 0, 0.1);
+  border-left-color: #c0caf5;
+  border-radius: 50%;
+  width: 16px;
+  height: 16px;
+  animation: spin 1s linear infinite;
+  display: inline-block;
+  vertical-align: middle;
+  margin-left: 8px;
+}
+
+.hidden {
+  display: none !important;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
 .tooltip {
   position: absolute;
   bottom: 110%;
@@ -192,8 +215,7 @@ button:disabled:hover .tooltip {
   flex-grow: 1;
 }
 
-textarea,
-input[type="file"] {
+textarea {
   box-sizing: border-box;
   width: 100%;
 }

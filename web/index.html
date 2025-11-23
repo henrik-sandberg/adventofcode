@@ -15,23 +15,25 @@
       </div>
       <div id="days-list" class="view">
         <div class="sub-header">
-          <button id="back-to-years" class="back-button">Back to Years</button>
+          <button id="back-to-years" class="back-button">Back</button>
           <h2 id="days-title"></h2>
         </div>
         <div id="days-buttons" class="button-container"></div>
       </div>
       <div id="problem-solver" class="view">
         <div class="sub-header">
-          <button id="back-to-days" class="back-button">Back to Days</button>
+          <button id="back-to-days" class="back-button">Back</button>
           <h2 id="problem-title"></h2>
-          <button id="solve-button">Solve</button>
+          <button id="solve-button">
+            <span class="button-text">Solve</span>
+            <span class="spinner hidden"></span>
+          </button>
         </div>
         <div class="solver-layout">
           <div class="solver-layout-left">
             <div class="input-section">
               <label for="puzzle-input">Puzzle Input</label>
               <textarea id="puzzle-input" rows="15" cols="80"></textarea>
-              <input type="file" id="file-input" accept=".txt" />
               <p class="error-message" id="input-error"></p>
             </div>
           </div>

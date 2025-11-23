@@ -3,6 +3,7 @@ document.addEventListener("DOMContentLoaded", () => {
     year: null,
     day: null,
   };
+
   const mainTitle = document.getElementById("main-title");
   const yearsListDiv = document.getElementById("years-list");
   const yearsButtonsDiv = document.getElementById("years-buttons");
@@ -11,11 +12,15 @@ document.addEventListener("DOMContentLoaded", () => {
   const daysTitle = document.getElementById("days-title");
   const problemSolverDiv = document.getElementById("problem-solver");
   const problemTitle = document.getElementById("problem-title");
+
   const puzzleInputTextarea = document.getElementById("puzzle-input");
-  const fileInput = document.getElementById("file-input");
   const inputError = document.getElementById("input-error");
-  const solveButton = document.getElementById("solve-button");
+
   const solutionOutput = document.getElementById("solution-output");
+
+  const solveButton = document.getElementById("solve-button");
+  const solveButtonText = solveButton.querySelector(".button-text");
+  const solveButtonSpinner = solveButton.querySelector(".spinner");
   const backToYearsButton = document.getElementById("back-to-years");
   const backToDaysButton = document.getElementById("back-to-days");
 
@@ -29,9 +34,6 @@ document.addEventListener("DOMContentLoaded", () => {
   function showYearsList() {
     mainTitle.classList.remove("hidden");
     showView(yearsListDiv);
-    solutionOutput.textContent = "";
-    puzzleInputTextarea.value = "";
-    fileInput.value = "";
   }
 
   function showDaysList() {
@@ -40,7 +42,6 @@ document.addEventListener("DOMContentLoaded", () => {
     daysTitle.textContent = `Select a Day for ${AppState.year}`;
     solutionOutput.textContent = "";
     puzzleInputTextarea.value = "";
-    fileInput.value = "";
   }
 
   function showProblemSolver() {
@@ -57,8 +58,8 @@ document.addEventListener("DOMContentLoaded", () => {
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
-      const years = (await response.json()).data;
       yearsButtonsDiv.innerHTML = "";
+      const years = (await response.json()).data;
       years.forEach((year) => {
         const button = document.createElement("button");
         button.textContent = year;
@@ -110,33 +111,18 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   async function solvePuzzle() {
+    solveButton.disabled = true;
+    solveButtonText.classList.add("hidden");
+    solveButtonSpinner.classList.remove("hidden");
+
     const textInput = puzzleInputTextarea.value;
-    const file = fileInput.files[0];
     inputError.textContent = "";
 
-    if (textInput && file) {
-      inputError.textContent =
-        "Please provide input either via text field OR file, not both.";
-      return;
-    }
-
-    let inputData = "";
-    if (textInput) {
-      inputData = textInput;
-    } else if (file) {
-      try {
-        inputData = await file.text();
-      } catch (error) {
-        inputError.textContent = "Error reading file.";
-        console.error("Error reading file:", error);
+    try {
+      if (!textInput) {
+        inputError.textContent = "Please provide puzzle input.";
         return;
       }
-    } else {
-      inputError.textContent = "Please provide puzzle input.";
-      return;
-    }
-
-    try {
       const response = await fetch(
         `/api/years/${AppState.year}/days/${AppState.day}`,
         {
@@ -144,7 +130,7 @@ document.addEventListener("DOMContentLoaded", () => {
           headers: {
             "Content-Type": "text/plain",
           },
-          body: inputData,
+          body: textInput,
         },
       );
       const result = await response.text();
@@ -158,16 +144,17 @@ document.addEventListener("DOMContentLoaded", () => {
     } catch (error) {
       solutionOutput.textContent = `An unexpected error occurred: ${error.message}`;
       solutionOutput.style.color = "red";
+    } finally {
+      solveButton.disabled = false;
+      solveButtonText.classList.remove("hidden");
+      solveButtonSpinner.classList.add("hidden");
     }
   }
-
-  // --- Event Listeners ---
 
   backToYearsButton.addEventListener("click", showYearsList);
   backToDaysButton.addEventListener("click", fetchDays);
   solveButton.addEventListener("click", solvePuzzle);
 
-  // Initial load
   fetchYears();
   showYearsList();
 });
