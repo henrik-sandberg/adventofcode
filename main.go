@@ -38,12 +38,10 @@ func main() {
 
 	yearStr := fmt.Sprintf("%d", *yearFlag)
 	dayStr := fmt.Sprintf("%02d", *dayFlag)
-
 	solver, ok := solutions.GetSolution(yearStr, dayStr)
 	if !ok {
 		log.Fatalf("Solution for day %s in year %s not found.", dayStr, yearStr)
 	}
-
 	if err := shared.Run(solver, os.Stdin, os.Stdout); err != nil {
 		log.Fatalf("Error running solution: %v", err)
 	}
@@ -75,49 +73,41 @@ func startWebServer() {
 func getYearsHandler(w http.ResponseWriter, r *http.Request) {
 	years := solutions.AvailableYears()
 	w.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(w).Encode(years)
+	json.NewEncoder(w).Encode(struct {
+		Data any `json:"data"`
+	}{
+		Data: years,
+	})
 }
 
 func getDaysHandler(w http.ResponseWriter, r *http.Request) {
-	yearStr := r.PathValue("year")
-	days := solutions.AvailableDays(yearStr)
-	if len(days) == 0 {
-		http.Error(w, fmt.Sprintf("Year %s not found or no solutions available.", yearStr), http.StatusNotFound)
-		return
-	}
+	days := solutions.AvailableDays(r.PathValue("year"))
 	w.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(w).Encode(days)
+	json.NewEncoder(w).Encode(struct {
+		Data any `json:"data"`
+	}{
+		Data: days,
+	})
 }
 
 func solveProblemHandler(w http.ResponseWriter, r *http.Request) {
-	yearStr := r.PathValue("year")
-	dayStr := r.PathValue("day")
+	year := r.PathValue("year")
+	day := r.PathValue("day")
 
 	body, err := io.ReadAll(r.Body)
 	if err != nil {
 		http.Error(w, "Error reading request body", http.StatusInternalServerError)
 		return
 	}
-	inputReader := strings.NewReader(string(body))
 
-	solver, ok := solutions.GetSolution(yearStr, dayStr)
+	bodyReader := strings.NewReader(string(body))
+
+	solver, ok := solutions.GetSolution(year, day)
 	if !ok {
-		http.Error(w, fmt.Sprintf("Solution for day %s in year %s not found.", dayStr, yearStr), http.StatusNotFound)
+		http.Error(w, fmt.Sprintf("Solution for day %s in year %s not found.", day, year), http.StatusNotFound)
 		return
 	}
 
-	reader, writer := io.Pipe()
-	defer reader.Close()
-
-	go func() {
-		defer writer.Close()
-		if err := shared.Run(solver, inputReader, writer); err != nil {
-			fmt.Fprintf(writer, "Error running solution: %v\n", err)
-		}
-	}()
-
 	w.Header().Set("Content-Type", "text/plain")
-	if _, err := io.Copy(w, reader); err != nil {
-		log.Printf("Error streaming solution output to response: %v", err)
-	}
+	shared.Run(solver, bodyReader, w)
 }

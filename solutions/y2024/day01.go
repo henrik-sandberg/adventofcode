@@ -7,7 +7,8 @@ import (
 )
 
 func Day01(input []string) (solution shared.Solution[int, int]) {
-	A, B := []int{}, []int{}
+	var A []int
+	var B []int
 	for _, line := range input {
 		ints := shared.IntSlice(strings.Fields(line))
 		A = append(A, ints[0])

@@ -1,4 +1,8 @@
 document.addEventListener("DOMContentLoaded", () => {
+  const AppState = {
+    year: null,
+    day: null,
+  };
   const mainTitle = document.getElementById("main-title");
   const yearsListDiv = document.getElementById("years-list");
   const yearsButtonsDiv = document.getElementById("years-buttons");
@@ -16,47 +20,36 @@ document.addEventListener("DOMContentLoaded", () => {
   const backToDaysButton = document.getElementById("back-to-days");
 
   const views = document.querySelectorAll(".view");
-  let currentYear = null;
-  let currentDay = null;
-
-  // --- Navigation Functions ---
 
   function showView(viewToShow) {
-    views.forEach((view) => {
-      view.classList.remove("active");
-    });
+    views.forEach((view) => view.classList.remove("active"));
     viewToShow.classList.add("active");
   }
 
   function showYearsList() {
     mainTitle.classList.remove("hidden");
     showView(yearsListDiv);
-    solutionOutput.textContent = ""; // Clear previous output
-    puzzleInputTextarea.value = ""; // Clear text input
-    fileInput.value = ""; // Clear file input
+    solutionOutput.textContent = "";
+    puzzleInputTextarea.value = "";
+    fileInput.value = "";
   }
 
-  function showDaysList(year) {
+  function showDaysList() {
     mainTitle.classList.add("hidden");
-    currentYear = year;
     showView(daysListDiv);
-    daysTitle.textContent = `Select a Day for ${year}`;
-    solutionOutput.textContent = ""; // Clear previous output
-    puzzleInputTextarea.value = ""; // Clear text input
-    fileInput.value = ""; // Clear file input
+    daysTitle.textContent = `Select a Day for ${AppState.year}`;
+    solutionOutput.textContent = "";
+    puzzleInputTextarea.value = "";
+    fileInput.value = "";
   }
 
-  function showProblemSolver(year, day) {
+  function showProblemSolver() {
     mainTitle.classList.add("hidden");
-    currentYear = year;
-    currentDay = day;
     showView(problemSolverDiv);
-    problemTitle.textContent = `Solving ${year} - Day ${day}`;
-    solutionOutput.textContent = ""; // Clear previous output
-    inputError.textContent = ""; // Clear input error
+    problemTitle.textContent = `Solving ${AppState.year} - Day ${AppState.day}`;
+    solutionOutput.textContent = "";
+    inputError.textContent = "";
   }
-
-  // --- Fetch Data from Backend ---
 
   async function fetchYears() {
     try {
@@ -64,12 +57,15 @@ document.addEventListener("DOMContentLoaded", () => {
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
-      const years = await response.json();
+      const years = (await response.json()).data;
       yearsButtonsDiv.innerHTML = "";
       years.forEach((year) => {
         const button = document.createElement("button");
         button.textContent = year;
-        button.onclick = () => fetchDays(year);
+        button.onclick = () => {
+          AppState.year = year;
+          fetchDays();
+        };
         yearsButtonsDiv.appendChild(button);
       });
     } catch (error) {
@@ -78,14 +74,14 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-  async function fetchDays(year) {
-    showDaysList(year);
+  async function fetchDays() {
+    showDaysList();
     try {
-      const response = await fetch(`/api/years/${year}/days`);
+      const response = await fetch(`/api/years/${AppState.year}/days`);
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
-      const implementedDays = new Set(await response.json());
+      const implementedDays = new Set((await response.json()).data);
       daysButtonsDiv.innerHTML = "";
 
       for (let i = 1; i <= 25; i++) {
@@ -94,7 +90,10 @@ document.addEventListener("DOMContentLoaded", () => {
         button.textContent = `Day ${day}`;
 
         if (implementedDays.has(day)) {
-          button.onclick = () => showProblemSolver(year, day);
+          button.onclick = () => {
+            AppState.day = day;
+            showProblemSolver();
+          };
         } else {
           button.disabled = true;
           const tooltip = document.createElement("span");
@@ -105,8 +104,8 @@ document.addEventListener("DOMContentLoaded", () => {
         daysButtonsDiv.appendChild(button);
       }
     } catch (error) {
-      console.error(`Error fetching days for ${year}:`, error);
-      daysButtonsDiv.innerHTML = `<p>Error loading days for ${year}.</p>`;
+      console.error(`Error fetching days for ${AppState.year}:`, error);
+      daysButtonsDiv.innerHTML = `<p>Error loading days for ${AppState.year}.</p>`;
     }
   }
 
@@ -122,7 +121,9 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     let inputData = "";
-    if (file) {
+    if (textInput) {
+      inputData = textInput;
+    } else if (file) {
       try {
         inputData = await file.text();
       } catch (error) {
@@ -130,8 +131,6 @@ document.addEventListener("DOMContentLoaded", () => {
         console.error("Error reading file:", error);
         return;
       }
-    } else if (textInput) {
-      inputData = textInput;
     } else {
       inputError.textContent = "Please provide puzzle input.";
       return;
@@ -139,7 +138,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     try {
       const response = await fetch(
-        `/api/years/${currentYear}/days/${currentDay}`,
+        `/api/years/${AppState.year}/days/${AppState.day}`,
         {
           method: "POST",
           headers: {
@@ -148,17 +147,15 @@ document.addEventListener("DOMContentLoaded", () => {
           body: inputData,
         },
       );
-
       const result = await response.text();
-      if (!response.ok) {
-        solutionOutput.textContent = `Error: ${result}`;
-        solutionOutput.style.color = "red";
-      } else {
+      if (response.ok) {
         solutionOutput.textContent = result;
         solutionOutput.style.color = "white";
+      } else {
+        solutionOutput.textContent = `Error: ${result}`;
+        solutionOutput.style.color = "red";
       }
     } catch (error) {
-      console.error("Error solving puzzle:", error);
       solutionOutput.textContent = `An unexpected error occurred: ${error.message}`;
       solutionOutput.style.color = "red";
     }
@@ -167,7 +164,7 @@ document.addEventListener("DOMContentLoaded", () => {
   // --- Event Listeners ---
 
   backToYearsButton.addEventListener("click", showYearsList);
-  backToDaysButton.addEventListener("click", () => fetchDays(currentYear));
+  backToDaysButton.addEventListener("click", fetchDays);
   solveButton.addEventListener("click", solvePuzzle);
 
   // Initial load
