@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Advent of Code Solver</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <div class="container">
+        <h1 id="main-title">Advent of Code Solver</h1>
+        <div id="years-list" class="list-view">
+            <h2>Select a Year</h2>
+            <div id="years-buttons" class="button-container"></div>
+        </div>
+        <div id="days-list" class="list-view hidden">
+            <div class="sub-header">
+                <button id="back-to-years" class="back-button">Back to Years</button>
+                <h2 id="days-title"></h2>
+            </div>
+            <div id="days-buttons" class="button-container"></div>
+        </div>
+        <div id="problem-solver" class="solver-view hidden">
+            <div class="sub-header">
+                <button id="back-to-days" class="back-button">Back to Days</button>
+                <h2 id="problem-title"></h2>
+                <button id="solve-button">Solve</button>
+            </div>
+            <div class="solver-layout">
+                <div class="solver-layout-left">
+                    <div class="input-section">
+                        <label for="puzzle-input">Puzzle Input</label>
+                        <textarea id="puzzle-input" rows="15" cols="80"></textarea>
+                        <input type="file" id="file-input" accept=".txt">
+                        <p class="error-message" id="input-error"></p>
+                    </div>
+                </div>
+                <div class="solver-layout-right">
+                    <div class="output-section">
+                        <h3>Result</h3>
+                        <pre id="solution-output"></pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="/static/script.js"></script>
+</body>
+</html>

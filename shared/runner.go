@@ -3,8 +3,7 @@ package shared
 import (
 	"bufio"
 	"fmt"
-	"log"
-	"os"
+	"io"
 	"time"
 )
 
@@ -13,26 +12,32 @@ type Solution[T1, T2 any] struct {
 	Part2 T2
 }
 
-func Run[T1, T2 any](f func([]string) Solution[T1, T2]) {
-	input := readLines()
+// Run executes the given solution function with the provided input and writes the output to the specified writer.
+func Run[T1, T2 any](f func([]string) Solution[T1, T2], inputReader io.Reader, outputWriter io.Writer) error {
+	input, err := readLines(inputReader)
+	if err != nil {
+		return fmt.Errorf("error reading input: %w", err)
+	}
+
 	start := time.Now()
 	solution := f(input)
 	elapsed := time.Since(start)
 
-	fmt.Printf("Part1: %v\n", solution.Part1)
-	fmt.Printf("Part2: %v\n", solution.Part2)
-	fmt.Printf("Found solution in %d ms\n", elapsed.Milliseconds())
+	fmt.Fprintf(outputWriter, "Part1: %v\n", solution.Part1)
+	fmt.Fprintf(outputWriter, "Part2: %v\n", solution.Part2)
+	fmt.Fprintf(outputWriter, "Found solution in %d ms\n", elapsed.Milliseconds())
+	return nil
 }
 
-func readLines() []string {
+func readLines(inputReader io.Reader) ([]string, error) {
 	lines := []string{}
-	scanner := bufio.NewScanner(os.Stdin)
+	scanner := bufio.NewScanner(inputReader)
 
 	for scanner.Scan() {
 		lines = append(lines, scanner.Text())
 	}
 	if err := scanner.Err(); err != nil {
-		log.Fatal("Error reading from stdin:", err)
+		return nil, fmt.Errorf("error reading from input: %w", err)
 	}
-	return lines
+	return lines, nil
 }

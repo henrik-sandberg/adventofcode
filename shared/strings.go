@@ -1,6 +1,9 @@
 package shared
 
-import "strconv"
+import (
+	"strconv"
+	"strings"
+)
 
 func Reverse(s string) string {
 	rns := []rune(s)
@@ -13,7 +16,7 @@ func Reverse(s string) string {
 func IntSlice(input []string) []int {
 	ints := make([]int, len(input), len(input))
 	for i, s := range input {
-		value, _ := strconv.Atoi(s)
+		value, _ := strconv.Atoi(strings.TrimSpace(s))
 		ints[i] = value
 	}
 	return ints
