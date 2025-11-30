@@ -6,8 +6,7 @@ import (
 )
 
 func TestDay19(t *testing.T) {
-	sampleInput := strings.Split(strings.TrimSpace(`
-px{a<2006:qkq,m>2090:A,rfg}
+	sampleInput := strings.Split(`px{a<2006:qkq,m>2090:A,rfg}
 pv{a>1716:R,A}
 lnx{m>1548:A,A}
 rfg{s<537:gd,x>2440:R,A}
@@ -23,8 +22,7 @@ hdj{m>838:A,pv}
 {x=1679,m=44,a=2067,s=496}
 {x=2036,m=264,a=79,s=2244}
 {x=2461,m=1339,a=466,s=291}
-{x=2127,m=1623,a=2188,s=1013}
-	`), "\n")
+{x=2127,m=1623,a=2188,s=1013}`, "\n")
 
 	res := Day19(sampleInput)
 
@@ -32,7 +30,7 @@ hdj{m>838:A,pv}
 		t.Errorf("part1: expected %d, got %d", expected, res.Part1)
 	}
 
-	if expected := 0; expected != res.Part2 {
+	if expected := 167409079868000; expected != res.Part2 {
 		t.Errorf("part2: expected %d, got %d", expected, res.Part2)
 	}
 }
