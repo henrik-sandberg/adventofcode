@@ -12,13 +12,13 @@ func (g *Grid) FindAny(b byte) complex128 {
 }
 
 func (g *Grid) FindAll(b byte) []complex128 {
-	res := []complex128{}
+	var ret []complex128
 	for k, v := range *g {
 		if v == b {
-			res = append(res, k)
+			ret = append(ret, k)
 		}
 	}
-	return res
+	return ret
 }
 
 func NewGrid(arr []string) Grid {
