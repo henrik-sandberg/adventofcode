@@ -1,8 +1,9 @@
 package y2024
 
 import (
-	"adventofcode/solutions/shared"
 	"fmt"
+
+	"adventofcode/solutions/shared"
 )
 
 func Day22(input []string) (solution shared.Solution[int, int]) {
@@ -14,7 +15,7 @@ func Day22(input []string) (solution shared.Solution[int, int]) {
 		return i
 	}
 	for _, secret := range shared.IntSlice(input) {
-		for i := 0; i < iterations; i++ {
+		for range iterations {
 			secret = iterate(secret)
 		}
 		solution.Part1 += secret
@@ -22,14 +23,14 @@ func Day22(input []string) (solution shared.Solution[int, int]) {
 	monkey := func(secret int) *map[string]int {
 		windowLength := 4
 		window := []int{}
-		for i := 0; i < windowLength; i++ {
+		for range windowLength {
 			prev := secret
 			secret = iterate(secret)
 			diff := secret%10 - prev%10
 			window = append(window, diff)
 		}
 		prices := map[string]int{}
-		for i := 0; i < iterations-windowLength; i++ {
+		for range iterations - windowLength {
 			prev := secret
 			secret = iterate(secret)
 			diff := secret%10 - prev%10

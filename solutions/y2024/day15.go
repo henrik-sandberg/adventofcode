@@ -1,9 +1,10 @@
 package y2024
 
 import (
-	"adventofcode/solutions/shared"
 	"slices"
 	"strings"
+
+	"adventofcode/solutions/shared"
 )
 
 func Day15(input []string) (solution shared.Solution[int, int]) {
@@ -17,7 +18,7 @@ func Day15(input []string) (solution shared.Solution[int, int]) {
 	}
 	m, bot := setup()
 	solution.Part1 = day15_sovler(m, bot, moves)
-	for i := 0; i < splitindex; i++ {
+	for i := range splitindex {
 		input[i] = strings.ReplaceAll(input[i], "#", "##")
 		input[i] = strings.ReplaceAll(input[i], "O", "[]")
 		input[i] = strings.ReplaceAll(input[i], ".", "..")

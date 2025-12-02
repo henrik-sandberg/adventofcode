@@ -1,8 +1,9 @@
 package y2023
 
 import (
-	"adventofcode/solutions/shared"
 	"strings"
+
+	"adventofcode/solutions/shared"
 )
 
 func Day24(input []string) (solution shared.Solution[int, int]) {
@@ -19,7 +20,7 @@ func (d *day24) part1(from, to float64) (res int) {
 	type equation struct {
 		p, v []int
 	}
-	equations := []equation{}
+	var equations []equation
 	for _, line := range d.input {
 		tmp := strings.Split(line, "@")
 		equations = append(equations, equation{

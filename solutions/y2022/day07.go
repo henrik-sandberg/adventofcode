@@ -1,10 +1,11 @@
 package y2022
 
 import (
-	"adventofcode/solutions/shared"
 	"math"
 	"strconv"
 	"strings"
+
+	"adventofcode/solutions/shared"
 )
 
 func Day07(input []string) (solution shared.Solution[int, int]) {
@@ -42,7 +43,8 @@ func buildGraph(input []string) node {
 	stack := []*node{}
 	for _, line := range input {
 		arr := strings.Split(line, " ")
-		if arr[0] == "$" {
+		switch arr[0] {
+		case "$":
 			if cmd := arr[1]; cmd == "cd" {
 				if target := arr[2]; target == ".." {
 					stack = stack[:len(stack)-1]
@@ -54,11 +56,11 @@ func buildGraph(input []string) node {
 					stack = append(stack, directory)
 				}
 			}
-		} else if arr[0] == "dir" {
+		case "dir":
 			name := arr[1]
 			e := &stack[len(stack)-1].nodes
 			(*e) = append((*e), &node{name: name})
-		} else {
+		default:
 			size, _ := strconv.Atoi(arr[0])
 			// Back propagating file size to root makes filtering much easier later
 			for _, n := range stack {

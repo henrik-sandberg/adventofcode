@@ -42,9 +42,9 @@ func minPossibleCubesProduct(samples []map[string]int) int {
 
 func parseGame(raw string) []map[string]int {
 	samples := []map[string]int{}
-	for _, sample := range strings.Split(strings.SplitN(raw, ": ", 2)[1], "; ") {
+	for sample := range strings.SplitSeq(strings.SplitN(raw, ": ", 2)[1], "; ") {
 		drawnCubes := map[string]int{}
-		for _, cubes := range strings.Split(sample, ", ") {
+		for cubes := range strings.SplitSeq(sample, ", ") {
 			cube := strings.Fields(cubes)
 			drawnCubes[cube[1]], _ = strconv.Atoi(cube[0])
 		}

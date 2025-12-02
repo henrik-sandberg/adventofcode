@@ -1,9 +1,10 @@
 package y2022
 
 import (
-	"adventofcode/solutions/shared"
 	"strconv"
 	"strings"
+
+	"adventofcode/solutions/shared"
 )
 
 func Day09(input []string) (solution shared.Solution[int, int]) {
@@ -19,7 +20,7 @@ func solveDay09(input []string, length int) int {
 		cmdArr := strings.Split(cmd, " ")
 		direction := cmdArr[0]
 		distance, _ := strconv.Atoi(cmdArr[1])
-		for n := 0; n < distance; n++ {
+		for range distance {
 			rope[0].move(direction)
 			for i := 1; i < len(rope); i++ {
 				rope[i].follow(rope[i-1])

@@ -1,5 +1,7 @@
 package y2022
 
+import "slices"
+
 type point struct {
 	x, y int
 }
@@ -40,11 +42,7 @@ func bfs(start *node, target string) (shortestPath []string) {
 			}
 			if !visited[n.name] {
 				visited[n.name] = true
-				newPath := []*node{}
-				for _, n := range path {
-					newPath = append(newPath, n)
-				}
-				newPath = append(newPath, n)
+				newPath := append(slices.Clone(path), n)
 				queue = append(queue, newPath)
 			}
 		}

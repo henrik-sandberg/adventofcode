@@ -1,9 +1,10 @@
 package y2022
 
 import (
-	"adventofcode/solutions/shared"
 	"strconv"
 	"strings"
+
+	"adventofcode/solutions/shared"
 )
 
 func Day05(input []string) (solution shared.Solution[string, string]) {
@@ -61,7 +62,7 @@ func parseCommand(command string) (int, int, int) {
 
 func getResult(stacks map[int]string) string {
 	result := ""
-	for i := 0; i < len(stacks); i++ {
+	for i := range len(stacks) {
 		s := stacks[i+1]
 		result += s[len(s)-1:]
 	}

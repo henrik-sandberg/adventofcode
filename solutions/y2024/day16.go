@@ -1,9 +1,11 @@
 package y2024
 
 import (
-	"adventofcode/solutions/shared"
 	"container/heap"
+	"maps"
 	"math"
+
+	"adventofcode/solutions/shared"
 )
 
 func Day16(input []string) (solution shared.Solution[int, int]) {
@@ -48,10 +50,7 @@ func Day16(input []string) (solution shared.Solution[int, int]) {
 				continue
 			}
 			if m[next] == '.' {
-				p := make(map[complex128]bool, len(current.seen)+1)
-				for k, v := range current.seen {
-					p[k] = v
-				}
+				p := maps.Clone(current.seen)
 				p[next] = true
 				enqueue(reindeer{next, dir, current.cost + change.cost, p})
 			}

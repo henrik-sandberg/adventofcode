@@ -1,8 +1,9 @@
 package y2022
 
 import (
-	"adventofcode/solutions/shared"
 	"sort"
+
+	"adventofcode/solutions/shared"
 )
 
 type monkey struct {
@@ -29,8 +30,8 @@ func Day11(input []string) (solution shared.Solution[int, int]) {
 }
 
 func solveDay11(monkeys map[int]*monkey, rounds int, decayFunc func(int) int) int {
-	for round := 0; round < rounds; round++ {
-		for i := 0; i < len(monkeys); i++ {
+	for range rounds {
+		for i := range len(monkeys) {
 			m := monkeys[i]
 			for _, item := range m.items {
 				m.inspections += 1
@@ -63,7 +64,8 @@ func getMonkeys() map[int]*monkey {
 			} else {
 				return 3
 			}
-		}}
+		},
+	}
 	monkeys[1] = &monkey{
 		items:   []int{93, 71, 79, 83, 69, 70, 94, 98},
 		divisor: 11,
@@ -76,7 +78,8 @@ func getMonkeys() map[int]*monkey {
 			} else {
 				return 6
 			}
-		}}
+		},
+	}
 	monkeys[2] = &monkey{
 		items:   []int{50, 74, 67, 92, 61, 76},
 		divisor: 19,
@@ -89,7 +92,8 @@ func getMonkeys() map[int]*monkey {
 			} else {
 				return 1
 			}
-		}}
+		},
+	}
 	monkeys[3] = &monkey{
 		items:   []int{76, 92},
 		divisor: 5,
@@ -102,7 +106,8 @@ func getMonkeys() map[int]*monkey {
 			} else {
 				return 6
 			}
-		}}
+		},
+	}
 	monkeys[4] = &monkey{
 		items:   []int{74, 94, 55, 87, 62},
 		divisor: 2,
@@ -115,7 +120,8 @@ func getMonkeys() map[int]*monkey {
 			} else {
 				return 0
 			}
-		}}
+		},
+	}
 	monkeys[5] = &monkey{
 		items:   []int{59, 62, 53, 62},
 		divisor: 7,
@@ -128,7 +134,8 @@ func getMonkeys() map[int]*monkey {
 			} else {
 				return 7
 			}
-		}}
+		},
+	}
 	monkeys[6] = &monkey{
 		items:   []int{62},
 		divisor: 17,
@@ -141,7 +148,8 @@ func getMonkeys() map[int]*monkey {
 			} else {
 				return 7
 			}
-		}}
+		},
+	}
 	monkeys[7] = &monkey{
 		items:   []int{85, 54, 53},
 		divisor: 13,
@@ -154,6 +162,7 @@ func getMonkeys() map[int]*monkey {
 			} else {
 				return 0
 			}
-		}}
+		},
+	}
 	return monkeys
 }

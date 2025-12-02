@@ -1,8 +1,9 @@
 package y2023
 
 import (
-	"adventofcode/solutions/shared"
 	"slices"
+
+	"adventofcode/solutions/shared"
 )
 
 func Day13(input []string) (solution shared.Solution[int, int]) {
@@ -16,10 +17,10 @@ func Day13(input []string) (solution shared.Solution[int, int]) {
 	}
 	vertical := func(pattern []string) {
 		h, w := len(pattern), len(pattern[0])
-		for x := 0; x < w; x++ {
+		for x := range w {
 			miss := 0
 			for offset := 1; x-offset >= 0 && x+offset-1 < w; offset++ {
-				for ri := 0; ri < h; ri++ {
+				for ri := range h {
 					miss += shared.BoolToInt(pattern[ri][x-offset] != pattern[ri][x+offset-1])
 				}
 			}
@@ -28,10 +29,10 @@ func Day13(input []string) (solution shared.Solution[int, int]) {
 	}
 	horizontal := func(pattern []string) {
 		h, w := len(pattern), len(pattern[0])
-		for y := 0; y < h; y++ {
+		for y := range h {
 			miss := 0
 			for offset := 1; y-offset >= 0 && y+offset-1 < h; offset++ {
-				for ci := 0; ci < w; ci++ {
+				for ci := range w {
 					miss += shared.BoolToInt(pattern[y-offset][ci] != pattern[y+offset-1][ci])
 				}
 			}

@@ -1,8 +1,9 @@
 package y2024
 
 import (
+	"fmt"
+
 	"adventofcode/solutions/shared"
-	"errors"
 )
 
 type guard struct {
@@ -45,5 +46,5 @@ func findPath(grid map[complex128]byte, g guard) (map[guard]bool, error) {
 			g.location = next
 		}
 	}
-	return map[guard]bool{}, errors.New("Loop detected!")
+	return nil, fmt.Errorf("loop detected")
 }

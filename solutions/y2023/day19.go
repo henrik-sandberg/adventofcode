@@ -2,6 +2,7 @@ package y2023
 
 import (
 	"adventofcode/solutions/shared"
+	"maps"
 	"regexp"
 	"strconv"
 	"strings"
@@ -23,7 +24,7 @@ func Day19(input []string) (solution shared.Solution[int, int]) {
 		tmp := strings.Split(input[idx], "{")
 		name := tmp[0]
 		var wf []Rule
-		for _, rule := range strings.Split(tmp[1][:len(tmp[1])-1], ",") {
+		for rule := range strings.SplitSeq(tmp[1][:len(tmp[1])-1], ",") {
 			parts := strings.Split(rule, ":")
 			if len(parts) == 1 {
 				wf = append(wf, Rule{
@@ -56,17 +57,11 @@ func Day19(input []string) (solution shared.Solution[int, int]) {
 		}
 		var truePr, falsePr map[byte]Range
 		if tLo <= tHi {
-			truePr = make(map[byte]Range, len(pr))
-			for k, v := range pr {
-				truePr[k] = v
-			}
+			truePr = maps.Clone(pr)
 			truePr[rule.Category] = Range{tLo, tHi}
 		}
 		if fLo <= fHi {
-			falsePr = make(map[byte]Range, len(pr))
-			for k, v := range pr {
-				falsePr[k] = v
-			}
+			falsePr = maps.Clone(pr)
 			falsePr[rule.Category] = Range{fLo, fHi}
 		}
 		return truePr, falsePr

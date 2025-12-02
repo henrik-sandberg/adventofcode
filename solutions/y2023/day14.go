@@ -1,9 +1,10 @@
 package y2023
 
 import (
-	"adventofcode/solutions/shared"
 	"fmt"
 	"slices"
+
+	"adventofcode/solutions/shared"
 )
 
 func Day14(input []string) (solution shared.Solution[int, int]) {
@@ -46,7 +47,7 @@ func Day14(input []string) (solution shared.Solution[int, int]) {
 	}
 	solution.Part1 = score()
 	seen := map[string]int{}
-	scores := []int{}
+	var scores []int
 	for cycle := 0; ; cycle++ {
 		for _, dir := range []complex128{grid.Up(), grid.Left(), grid.Down(), grid.Right()} {
 			for roll(dir) != 0 {

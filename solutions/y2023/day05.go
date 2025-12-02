@@ -32,7 +32,7 @@ func Day05(input []string) (solution shared.Solution[int, int]) {
 
 	solver := func(seeds []Seed) int {
 		for _, mapping := range mappings {
-			next := []Seed{}
+			var next []Seed
 			for _, seed := range seeds {
 			loop:
 				for seed.Length > 0 {
@@ -60,13 +60,13 @@ func Day05(input []string) (solution shared.Solution[int, int]) {
 		return best
 	}
 	inp := shared.IntSlice(strings.Fields(input[0])[1:])
-	seeds := []Seed{}
+	var seeds []Seed
 	for _, val := range inp {
 		seeds = append(seeds, Seed{val, 1})
 	}
 	solution.Part1 = solver(seeds)
 
-	seeds = []Seed{}
+	seeds = nil
 	for i := 0; i < len(inp); i += 2 {
 		seeds = append(seeds, Seed{inp[i], inp[i+1]})
 	}

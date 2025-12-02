@@ -1,9 +1,10 @@
 package y2022
 
 import (
-	"adventofcode/solutions/shared"
 	"fmt"
 	"math"
+
+	"adventofcode/solutions/shared"
 )
 
 func Day12(input []string) (solution shared.Solution[int, int]) {
@@ -70,13 +71,14 @@ func buildGraphDay12(input []string) (nodes []*node) {
 func buildNode(r rune, p point) *node {
 	var name string
 	var elevation int
-	if r == 83 {
+	switch r {
+	case 83:
 		name = "S"
 		elevation = 0
-	} else if r == 69 {
+	case 69:
 		name = "E"
 		elevation = int('z' - 'a')
-	} else {
+	default:
 		name = fmt.Sprint(p)
 		elevation = int(r - 'a')
 	}

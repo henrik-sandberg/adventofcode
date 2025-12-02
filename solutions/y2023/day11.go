@@ -1,14 +1,15 @@
 package y2023
 
 import (
-	"adventofcode/solutions/shared"
 	"strings"
+
+	"adventofcode/solutions/shared"
 )
 
 func Day11(input []string) (solution shared.Solution[int, int]) {
 	solver := func(expansionMultiplier int) int {
 		multiplier := max(1, expansionMultiplier-1)
-		rowadjust := []int{}
+		var rowadjust []int
 		for i, row := range input {
 			previous := 0
 			if len(rowadjust) > 0 {
@@ -16,7 +17,7 @@ func Day11(input []string) (solution shared.Solution[int, int]) {
 			}
 			rowadjust = append(rowadjust, previous+multiplier*shared.BoolToInt(!strings.ContainsRune(row, '#')))
 		}
-		coladjust := []int{}
+		var coladjust []int
 		for j := range input[0] {
 			previous := 0
 			if len(coladjust) > 0 {

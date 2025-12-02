@@ -20,9 +20,6 @@ func findIndexOfDistinctCharacters(s string, n int) int {
 		if len(unique) == n {
 			return i
 		}
-		//if set := Set([]rune(s[i-n : i])); len(set) == n {
-		//return i
-		//}
 	}
 	return 0
 }

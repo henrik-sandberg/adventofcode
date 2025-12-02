@@ -32,7 +32,7 @@ func day08_part1(forest [][]int) int {
 			}
 		}
 	}
-	for ci := 0; ci < len(forest[0]); ci++ {
+	for ci := range len(forest[0]) {
 		visible[0][ci] = 1
 		max := forest[0][ci]
 		for ri := 1; ri < len(forest)-1; ri++ {

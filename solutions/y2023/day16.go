@@ -45,7 +45,7 @@ func Day16(input []string) (solution shared.Solution[int, int]) {
 				}
 			}
 		}
-		unique := map[complex128]interface{}{}
+		unique := map[complex128]any{}
 		for k := range seen {
 			unique[k.pos] = nil
 		}
@@ -55,7 +55,7 @@ func Day16(input []string) (solution shared.Solution[int, int]) {
 	c := func(a, b int) complex128 {
 		return complex(float64(a), float64(b))
 	}
-	for i := 0; i < len(input); i++ {
+	for i := range len(input) {
 		solution.Part2 = max(solution.Part2, solver(light{c(0, i), 1}))
 		solution.Part2 = max(solution.Part2, solver(light{c(i, 0), 1i}))
 		solution.Part2 = max(solution.Part2, solver(light{c(i, len(input)-1), -1i}))

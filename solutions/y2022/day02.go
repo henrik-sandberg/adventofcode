@@ -1,11 +1,12 @@
 package y2022
 
 import (
-	"adventofcode/solutions/shared"
 	"strings"
+
+	"adventofcode/solutions/shared"
 )
 
-type game_option struct {
+type gameOption struct {
 	name  string
 	beats string
 	loses string
@@ -13,22 +14,21 @@ type game_option struct {
 }
 
 func Day02(input []string) (solution shared.Solution[int, int]) {
+	rock := gameOption{name: "rock", beats: "scissor", loses: "paper", value: 1}
+	paper := gameOption{name: "paper", beats: "rock", loses: "scissor", value: 2}
+	scissor := gameOption{name: "scissor", beats: "paper", loses: "rock", value: 3}
 
-	rock := game_option{name: "rock", beats: "scissor", loses: "paper", value: 1}
-	paper := game_option{name: "paper", beats: "rock", loses: "scissor", value: 2}
-	scissor := game_option{name: "scissor", beats: "paper", loses: "rock", value: 3}
+	gameOptions := make(map[string]gameOption)
+	gameOptions[rock.name] = rock
+	gameOptions[paper.name] = paper
+	gameOptions[scissor.name] = scissor
 
-	game_options := make(map[string]game_option)
-	game_options[rock.name] = rock
-	game_options[paper.name] = paper
-	game_options[scissor.name] = scissor
-
-	solution.Part1 = day02_part1(input, game_options)
-	solution.Part2 = day02_part2(input, game_options)
+	solution.Part1 = day02_part1(input, gameOptions)
+	solution.Part2 = day02_part2(input, gameOptions)
 	return
 }
 
-func day02_part1(input []string, game_options map[string]game_option) (score int) {
+func day02_part1(input []string, gameOptions map[string]gameOption) (score int) {
 	mappings := make(map[string]string)
 	mappings["A"] = "rock"
 	mappings["B"] = "paper"
@@ -40,12 +40,12 @@ func day02_part1(input []string, game_options map[string]game_option) (score int
 
 	for _, round := range input {
 		s := strings.Split(round, " ")
-		score += calculate_score(game_options[mappings[s[1]]], game_options[mappings[s[0]]])
+		score += calculate_score(gameOptions[mappings[s[1]]], gameOptions[mappings[s[0]]])
 	}
 	return
 }
 
-func day02_part2(input []string, game_options map[string]game_option) (score int) {
+func day02_part2(input []string, gameOptions map[string]gameOption) (score int) {
 	mappings := make(map[string]string)
 	mappings["A"] = "rock"
 	mappings["B"] = "paper"
@@ -53,21 +53,22 @@ func day02_part2(input []string, game_options map[string]game_option) (score int
 
 	for _, round := range input {
 		s := strings.Split(round, " ")
-		they := game_options[mappings[s[0]]]
-		var us game_option
-		if s[1] == "X" {
-			us = game_options[they.beats]
-		} else if s[1] == "Y" {
-			us = game_options[they.name]
-		} else {
-			us = game_options[they.loses]
+		they := gameOptions[mappings[s[0]]]
+		var us gameOption
+		switch s[1] {
+		case "X":
+			us = gameOptions[they.beats]
+		case "Y":
+			us = gameOptions[they.name]
+		default:
+			us = gameOptions[they.loses]
 		}
 		score += calculate_score(us, they)
 	}
 	return
 }
 
-func calculate_score(us game_option, they game_option) int {
+func calculate_score(us gameOption, they gameOption) int {
 	// Score: 0 if lost, 3 if draw, 6 if win
 	// plus value
 	if us.name == they.name {

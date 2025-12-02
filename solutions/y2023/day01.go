@@ -16,8 +16,8 @@ func Day01(input []string) (solution shared.Solution[int, int]) {
 		}
 		return s
 	}
-	digitRegexp := regexp.MustCompile("\\d")
-	digitAndDigitNameRegexp := regexp.MustCompile("\\d|" + strings.Join(digits[1:], "|"))
+	digitRegexp := regexp.MustCompile(`\d`)
+	digitAndDigitNameRegexp := regexp.MustCompile(`\d|` + strings.Join(digits[1:], "|"))
 	for _, line := range input {
 		if nums := digitRegexp.FindAllString(line, -1); len(nums) > 0 {
 			n, _ := strconv.Atoi(nums[0] + nums[len(nums)-1])

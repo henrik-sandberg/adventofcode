@@ -17,7 +17,7 @@ func Day22(input []string) (solution shared.Solution[int, int]) {
 		to   point
 	}
 	re := regexp.MustCompile(`\d+`)
-	stack := []brick{}
+	var stack []brick
 	for _, line := range input {
 		ints := shared.IntSlice(re.FindAllString(line, -1))
 		stack = append(stack, brick{
@@ -35,7 +35,7 @@ func Day22(input []string) (solution shared.Solution[int, int]) {
 			if ind == skip {
 				continue
 			}
-			area := []point{}
+			var area []point
 			for x := br.from.x; x <= br.to.x; x++ {
 				for y := br.from.y; y <= br.to.y; y++ {
 					area = append(area, point{x: x, y: y})
@@ -58,9 +58,8 @@ func Day22(input []string) (solution shared.Solution[int, int]) {
 		return falls
 	}
 	drop(stack, -1)
-	for i := 0; i < len(stack); i++ {
-		cop := make([]brick, len(stack))
-		copy(cop, stack)
+	for i := range len(stack) {
+		cop := slices.Clone(stack)
 		res := drop(cop, i)
 		if res == 0 {
 			solution.Part1++

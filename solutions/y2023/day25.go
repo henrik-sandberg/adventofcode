@@ -1,15 +1,16 @@
 package y2023
 
 import (
-	"adventofcode/solutions/shared"
 	"cmp"
 	"errors"
 	"maps"
 	"slices"
 	"strings"
+
+	"adventofcode/solutions/shared"
 )
 
-func Day25(input []string) (solution shared.Solution[int, interface{}]) {
+func Day25(input []string) (solution shared.Solution[int, any]) {
 	G := map[string][]string{}
 	for _, line := range input {
 		fs := strings.Split(line, ": ")
@@ -46,7 +47,7 @@ func Day25(input []string) (solution shared.Solution[int, interface{}]) {
 			})
 			delete(S, s)
 			if len(S) == 0 {
-				return 0, errors.New("Failed to resolve")
+				return 0, errors.New("failed to resolve")
 			}
 		}
 		return len(S) * countDisjoint(slices.Collect(maps.Keys(G))), nil

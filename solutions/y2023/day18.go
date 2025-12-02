@@ -1,10 +1,11 @@
 package y2023
 
 import (
-	"adventofcode/solutions/shared"
 	"math"
 	"strconv"
 	"strings"
+
+	"adventofcode/solutions/shared"
 )
 
 func Day18(input []string) (solution shared.Solution[int, int]) {
@@ -25,7 +26,7 @@ func Day18(input []string) (solution shared.Solution[int, int]) {
 	solver := func(vs []complex128) int {
 		innerArea := float64(0)
 		perimeter := 0
-		for i := 0; i < len(vs)-1; i++ {
+		for i := range len(vs) - 1 {
 			a, b := vs[i], vs[i+1]
 			innerArea += real(a)*imag(b) - real(b)*imag(a)
 			perimeter += int(math.Abs(real(a)-real(b)) + math.Abs(imag(a)-imag(b)))

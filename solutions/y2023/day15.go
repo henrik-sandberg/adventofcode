@@ -1,9 +1,10 @@
 package y2023
 
 import (
-	"adventofcode/solutions/shared"
 	"slices"
 	"strings"
+
+	"adventofcode/solutions/shared"
 )
 
 type lens struct {
@@ -12,11 +13,11 @@ type lens struct {
 }
 
 func Day15(input []string) (solution shared.Solution[int, int]) {
-	for _, s := range strings.Split(input[0], ",") {
+	for s := range strings.SplitSeq(input[0], ",") {
 		solution.Part1 += hash(s)
 	}
 	boxes := make([][]lens, 256)
-	for _, s := range strings.Split(input[0], ",") {
+	for s := range strings.SplitSeq(input[0], ",") {
 		if s[len(s)-1] == '-' {
 			label := s[:len(s)-1]
 			h := hash(label)

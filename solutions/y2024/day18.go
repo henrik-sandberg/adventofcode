@@ -1,8 +1,9 @@
 package y2024
 
 import (
-	"adventofcode/solutions/shared"
 	"strings"
+
+	"adventofcode/solutions/shared"
 )
 
 func Day18(input []string) (solution shared.Solution[int, string]) {
@@ -10,8 +11,8 @@ func Day18(input []string) (solution shared.Solution[int, string]) {
 	size := 71
 	target := complex128(70 + 70i)
 	m := map[complex128]rune{}
-	for r := 0; r < size; r++ {
-		for c := 0; c < size; c++ {
+	for r := range size {
+		for c := range size {
 			m[complex(float64(c), float64(r))] = '.'
 		}
 	}

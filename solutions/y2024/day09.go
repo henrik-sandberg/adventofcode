@@ -13,7 +13,7 @@ func Day09(input []string) (solution shared.Solution[int, int]) {
 		} else {
 			d = -1
 		}
-		for n := 0; n < int(v-'0'); n++ {
+		for range int(v - '0') {
 			disk1 = append(disk1, d)
 		}
 	}

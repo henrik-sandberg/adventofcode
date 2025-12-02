@@ -1,11 +1,12 @@
 package y2022
 
 import (
-	"adventofcode/solutions/shared"
 	"errors"
 	"log"
 	"regexp"
 	"strconv"
+
+	"adventofcode/solutions/shared"
 )
 
 func Day19(input []string) (solution shared.Solution[int, int]) {
@@ -116,10 +117,10 @@ func (bp blueprint) calculateHighestGeodeLevel(cycles int) (result int) {
 }
 
 func parseBlueprint(line string) (blueprint, error) {
-	numberRegex := regexp.MustCompile("\\d+")
+	numberRegex := regexp.MustCompile(`\d+`)
 	match := numberRegex.FindAllString(line, -1)
 	if len(match) != 7 {
-		return blueprint{}, errors.New("Unexpected format")
+		return blueprint{}, errors.New("unexpected format")
 	}
 	bp := blueprint{}
 	bp.id, _ = strconv.Atoi(match[0])
