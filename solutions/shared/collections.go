@@ -1,5 +1,7 @@
 package shared
 
+import "iter"
+
 // Returns the count of elements in s as a map
 func Counts[T comparable](s []T) map[T]int {
 	m := map[T]int{}
@@ -81,6 +83,17 @@ func Permutations[T any](set []T, length int) <-chan []T {
 		helper(0)
 	}()
 	return ch
+}
+
+// Returns an iterator over the idx indexed values of sub-slice
+func Column[T any](sl [][]T, idx int) iter.Seq[T] {
+	return func(yield func(T) bool) {
+		for _, s := range sl {
+			if !yield(s[idx]) {
+				return
+			}
+		}
+	}
 }
 
 func toMap[T comparable](slice []T) map[T]bool {
