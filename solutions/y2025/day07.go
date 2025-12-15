@@ -6,15 +6,6 @@ import (
 
 func Day07(input []string) (solution shared.Solution[int, int]) {
 	grid := shared.NewGrid(input)
-	findNextNode := func(p complex128) complex128 {
-		for grid[p] != 0 {
-			if grid[p] == '^' {
-				return p
-			}
-			p += 1i
-		}
-		return -1
-	}
 	var memo = make(map[complex128]int)
 	var dfs func(c complex128) int
 	dfs = func(c complex128) int {
@@ -24,14 +15,17 @@ func Day07(input []string) (solution shared.Solution[int, int]) {
 		if _, ok := grid[c]; !ok {
 			return 1
 		}
-		left, right := findNextNode(c-1), findNextNode(c+1)
+		left := c - 1
+		for ; grid[left] != 0 && grid[left] != '^'; left += 1i {
+		}
+		right := c + 1
+		for ; grid[right] != 0 && grid[right] != '^'; right += 1i {
+		}
 		total := dfs(left) + dfs(right)
 		memo[c] = total
 		return total
 	}
-	start := grid.FindAny('S')
-	dfs(start)
+	solution.Part2 = dfs(grid.FindAny('S'))
 	solution.Part1 = len(memo)
-	solution.Part2 = memo[start]
 	return
 }
