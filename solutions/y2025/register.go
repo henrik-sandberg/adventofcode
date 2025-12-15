@@ -12,7 +12,7 @@ var Solutions = map[string]func([]string) shared.Solution[any, any]{
 	"05": shared.WrapSolution(Day05),
 	"06": shared.WrapSolution(Day06),
 	"07": shared.WrapSolution(Day07),
-	//	"08": shared.WrapSolution(Day08),
+	"08": shared.WrapSolution(Day08),
 	//	"09": shared.WrapSolution(Day09),
 	//	"10": shared.WrapSolution(Day10),
 	//	"11": shared.WrapSolution(Day11),
