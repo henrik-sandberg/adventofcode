@@ -4,7 +4,7 @@ import "iter"
 
 // Returns the count of elements in s as a map
 func Counts[T comparable](s []T) map[T]int {
-	m := map[T]int{}
+	m := make(map[T]int)
 	for _, v := range s {
 		m[v]++
 	}
@@ -34,55 +34,53 @@ func Intersect[T comparable](first, second []T) []T {
 	return ret
 }
 
-func Combinations[T any](set []T, length int) <-chan []T {
-	ch := make(chan []T)
-
-	go func() {
-		defer close(ch)
-		var helper func([]T, int, []T)
-
-		helper = func(currentSet []T, length int, currentComb []T) {
-			if length == 0 {
-				comb := make([]T, len(currentComb))
-				copy(comb, currentComb)
-				ch <- comb
-				return
+func Combinations[T any](set []T, length int) iter.Seq[[]T] {
+	return func(yield func([]T) bool) {
+		work := make([]T, length)
+		var helper func(int, int) bool
+		helper = func(start, depth int) bool {
+			if depth == length {
+				out := make([]T, length)
+				copy(out, work)
+				return yield(out)
 			}
-			for i := 0; i <= len(currentSet)-length; i++ {
-				helper(currentSet[i+1:], length-1, append(currentComb, currentSet[i]))
+			for i := start; i <= len(set)-(length-depth); i++ {
+				work[depth] = set[i]
+				if !helper(i+1, depth+1) {
+					return false
+				}
 			}
+			return true
 		}
-		helper(set, length, []T{})
-	}()
-	return ch
+		helper(0, 0)
+	}
 }
 
-func Permutations[T any](set []T, length int) <-chan []T {
-	ch := make(chan []T)
-	go func() {
-		defer close(ch)
+func Permutations[T any](set []T, length int) iter.Seq[[]T] {
+	return func(yield func([]T) bool) {
 		used := make([]bool, len(set))
-		temp := make([]T, length)
-		var helper func(int)
-		helper = func(k int) {
+		work := make([]T, length)
+		var helper func(int) bool
+		helper = func(k int) bool {
 			if k == length {
-				tmp := make([]T, length)
-				copy(tmp, temp)
-				ch <- tmp
-				return
+				out := make([]T, length)
+				copy(out, work)
+				return yield(out)
 			}
 			for i := range set {
 				if !used[i] {
 					used[i] = true
-					temp[k] = set[i]
-					helper(k + 1)
+					work[k] = set[i]
+					if !helper(k + 1) {
+						return false
+					}
 					used[i] = false
 				}
 			}
+			return true
 		}
 		helper(0)
-	}()
-	return ch
+	}
 }
 
 // Returns an iterator over the idx indexed values of sub-slice
