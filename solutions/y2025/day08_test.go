@@ -29,7 +29,7 @@ func TestDay08(t *testing.T) {
 
 	input := strings.Split(sampleInput, "\n")
 
-	res := (&day08{}).solve(input, 10)
+	res := day08solve(input, 10)
 
 	if expected := 40; expected != res.Part1 {
 		t.Errorf("part1: expected %d, got %d", expected, res.Part1)

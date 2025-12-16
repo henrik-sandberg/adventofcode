@@ -40,7 +40,7 @@ graphbuilder:
 		var t tile
 		for len(queue) > 0 {
 			t, queue = queue[0], queue[1:]
-			for _, dir := range d.grid.Directions() {
+			for _, dir := range []complex128{-1i, 1, 1i, -1} {
 				next := t.pos + dir
 				if next == target {
 					graph[from] = append(graph[from], tile{target, t.cost + 1})
@@ -80,7 +80,7 @@ graphbuilder:
 
 func (d *day23) dfs(path []complex128) (cost int) {
 	directions := map[byte]complex128{'>': 1, 'v': 1i, '<': -1, '^': -1i}
-	for _, dir := range d.grid.Directions() {
+	for _, dir := range []complex128{-1i, 1, 1i, -1} {
 		next := path[len(path)-1] + dir
 		if next == d.target {
 			return len(path)
@@ -100,7 +100,7 @@ func (d *day23) intersections() []complex128 {
 	for v, val := range d.grid {
 		if val != '#' {
 			count := 0
-			for _, dir := range d.grid.Directions() {
+			for _, dir := range []complex128{-1i, 1, 1i, -1} {
 				val, ok := d.grid[v+dir]
 				if ok && val != '#' {
 					count++

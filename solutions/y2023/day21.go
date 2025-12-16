@@ -25,7 +25,7 @@ func (d *day21) bfs() iter.Seq[int] {
 	seen := map[complex128]int{v: 0}
 	for len(queue) > 0 {
 		v, queue = queue[0], queue[1:]
-		for _, d := range grid.Directions() {
+		for _, d := range []complex128{-1i, 1, 1i, -1} {
 			next := v + d
 			if _, ok := seen[next]; !ok && grid[next] == '.' {
 				seen[next] = seen[v] + 1

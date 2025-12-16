@@ -17,9 +17,9 @@ func Day10(input []string) (solution shared.Solution[int, int]) {
 		}
 		return path
 	}
-	loop := []complex128{}
+	var loop []complex128
 	start := grid.FindAny('S')
-	for _, dir := range grid.Directions() {
+	for _, dir := range []complex128{-1i, 1, 1i, -1} {
 		if lp := findLoop(start, dir); len(lp) > len(loop) {
 			loop = lp
 		}

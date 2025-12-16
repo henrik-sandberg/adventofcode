@@ -12,7 +12,7 @@ func Day10(input []string) (solution shared.Solution[int, int]) {
 			queue := []complex128{point}
 			for len(queue) > 0 {
 				point, queue = queue[0], queue[1:]
-				for _, dir := range grid.Directions() {
+				for _, dir := range []complex128{-1i, 1, 1i, -1} {
 					if next := point + dir; (!seen[next] || distinctTrails) && grid[point]+1 == grid[next] {
 						seen[next] = true
 						if grid[next] == '9' {

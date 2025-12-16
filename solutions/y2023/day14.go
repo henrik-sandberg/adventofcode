@@ -43,13 +43,13 @@ func Day14(input []string) (solution shared.Solution[int, int]) {
 		}
 		return res
 	}
-	for roll(grid.Up()) != 0 {
+	for roll(-1i) != 0 {
 	}
 	solution.Part1 = score()
 	seen := map[string]int{}
 	var scores []int
 	for cycle := 0; ; cycle++ {
-		for _, dir := range []complex128{grid.Up(), grid.Left(), grid.Down(), grid.Right()} {
+		for _, dir := range []complex128{-1i, -1, 1i, 1} {
 			for roll(dir) != 0 {
 			}
 		}

@@ -2,101 +2,54 @@ package y2025
 
 import (
 	"adventofcode/solutions/shared"
-	"math"
 	"slices"
 	"strings"
 )
 
-type day08 struct {
-	points map[int]struct {
-		x, y, z int
-	}
-	edges []struct {
-		pointA, pointB int
-		weight         float64
-	}
-}
-
 func Day08(input []string) (solution shared.Solution[int, int]) {
-	return (&day08{}).solve(input, 1000)
+	return day08solve(input, 1000)
 }
 
-func (d *day08) init(input []string) {
-	d.points = make(map[int]struct {
+func day08solve(input []string, pairs int) (solution shared.Solution[int, int]) {
+	type point struct {
+		id      int
 		x, y, z int
-	})
+	}
+	var points []point
 	for idx, s := range input {
 		ints := shared.IntSlice(strings.Split(s, ","))
-		d.points[idx] = struct{ x, y, z int }{x: ints[0], y: ints[1], z: ints[2]}
+		points = append(points, point{
+			id: idx,
+			x:  ints[0], y: ints[1], z: ints[2],
+		})
 	}
-	for idxA := range input {
-		a := d.points[idxA]
-		for idxB := idxA + 1; idxB < len(input); idxB++ {
-			b := d.points[idxB]
-			d.edges = append(d.edges, struct {
-				pointA, pointB int
-				weight         float64
-			}{
-				idxA, idxB, math.Pow(float64(b.x-a.x), 2) + math.Pow(float64(b.y-a.y), 2) + math.Pow(float64(b.z-a.z), 2),
+	var edges []shared.Edge
+	for _, a := range points {
+		for _, b := range points[a.id+1:] {
+			edges = append(edges, shared.Edge{
+				U:      a.id,
+				V:      b.id,
+				Weight: (b.x-a.x)*(b.x-a.x) + (b.y-a.y)*(b.y-a.y) + (b.z-a.z)*(b.z-a.z),
 			})
 		}
 	}
-	slices.SortFunc(d.edges, func(a, b struct {
-		pointA, pointB int
-		weight         float64
-	}) int {
-		return int(a.weight - b.weight)
+	slices.SortFunc(edges, func(a, b shared.Edge) int {
+		return a.Weight - b.Weight
 	})
-}
-
-func (d *day08) solve(input []string, pairs int) (solution shared.Solution[int, int]) {
-	d.init(input)
-	clusters := d.allClusterSizes(pairs)
-	solution.Part1 = clusters[0] * clusters[1] * clusters[2]
-
-	low := 0
-	high := len(d.edges) - 1
-	mid := 0
-	for low <= high {
-		mid = low + (high-low)/2
-		if len(d.allClusterSizes(mid)) > 1 {
-			low = mid + 1
-		} else {
-			high = mid - 1
-		}
+	dsu := shared.NewDSU(len(points))
+	for _, edge := range edges[:pairs] {
+		dsu.Union(edge.U, edge.V)
 	}
-	edge := d.edges[mid-1]
-	solution.Part2 = d.points[edge.pointA].x * d.points[edge.pointB].x
+	var clusterSizes []int
+	for c := range dsu.Components() {
+		clusterSizes = append(clusterSizes, len(c))
+	}
+	slices.Sort(clusterSizes)
+	slices.Reverse(clusterSizes)
+	solution.Part1 = clusterSizes[0] * clusterSizes[1] * clusterSizes[2]
+
+	mst := shared.Kruskal(len(points), edges)
+	last := mst[len(mst)-1]
+	solution.Part2 = points[last.U].x * points[last.V].x
 	return
-
-}
-
-func (d *day08) allClusterSizes(maxEdges int) []int {
-	edges := make(map[int][]int)
-	for _, edge := range d.edges[:maxEdges] {
-		edges[edge.pointA] = append(edges[edge.pointA], edge.pointB)
-		edges[edge.pointB] = append(edges[edge.pointB], edge.pointA)
-	}
-	var clusters []int
-	visited := make(map[int]bool)
-	for _, edge := range d.edges {
-		queue := []int{edge.pointA, edge.pointB}
-		var node int
-		var size int
-		for len(queue) > 0 {
-			node, queue = queue[0], queue[1:]
-			if visited[node] {
-				continue
-			}
-			size++
-			visited[node] = true
-			queue = append(queue, edges[node]...)
-		}
-		if size > 0 {
-			clusters = append(clusters, size)
-		}
-	}
-	slices.Sort(clusters)
-	slices.Reverse(clusters)
-	return clusters
 }

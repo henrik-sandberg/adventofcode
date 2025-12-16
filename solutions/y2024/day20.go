@@ -14,7 +14,7 @@ func day20Solver(input []string, limit int) (solution shared.Solution[int, int])
 	target := grid.FindAny('E')
 	arr := []complex128{start}
 	for arr[len(arr)-1] != target {
-		for _, dir := range grid.Directions() {
+		for _, dir := range []complex128{-1i, 1, 1i, -1} {
 			next := arr[len(arr)-1] + dir
 			if grid[next] != '#' && (len(arr) < 2 || arr[len(arr)-2] != next) {
 				arr = append(arr, next)
