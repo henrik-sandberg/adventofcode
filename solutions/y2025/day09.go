@@ -13,15 +13,6 @@ func Day09(input []string) (solution shared.Solution[int, int]) {
 	type bounds struct {
 		left, right, top, bottom int
 	}
-	type rectangle struct {
-		bounds
-		area int
-	}
-	points := make([]point, len(input))
-	for i, s := range input {
-		ints := shared.IntSlice(strings.Split(s, ","))
-		points[i] = point{x: ints[0], y: ints[1]}
-	}
 	makeBounds := func(a, b point) bounds {
 		return bounds{
 			left:   min(a.x, b.x),
@@ -30,23 +21,29 @@ func Day09(input []string) (solution shared.Solution[int, int]) {
 			bottom: max(a.y, b.y),
 		}
 	}
-	var rectangles []rectangle
-	for ps := range shared.Combinations(points, 2) {
-		bnds := makeBounds(ps[0], ps[1])
-		area := (bnds.right - bnds.left + 1) * (bnds.bottom - bnds.top + 1)
-		rectangles = append(rectangles, rectangle{bounds: bnds, area: area})
+	area := func(b bounds) int {
+		return (b.right - b.left + 1) * (b.bottom - b.top + 1)
 	}
-	slices.SortFunc(rectangles, func(a, b rectangle) int {
-		return b.area - a.area
+	points := make([]point, len(input))
+	for i, s := range input {
+		ints := shared.IntSlice(strings.Split(s, ","))
+		points[i] = point{x: ints[0], y: ints[1]}
+	}
+	var rectangles []bounds
+	for ps := range shared.Combinations(points, 2) {
+		rectangles = append(rectangles, makeBounds(ps[0], ps[1]))
+	}
+	slices.SortFunc(rectangles, func(a, b bounds) int {
+		return area(b) - area(a)
 	})
-	solution.Part1 = rectangles[0].area
-	intersectsPolyline := func(r rectangle) bool {
+	solution.Part1 = area(rectangles[0])
+	intersectsPolyline := func(rb bounds) bool {
 		for i := range points {
 			pb := makeBounds(points[i], points[(i+1)%len(points)])
-			if pb.left < r.right &&
-				pb.right > r.left &&
-				pb.bottom > r.top &&
-				pb.top < r.bottom {
+			if pb.left < rb.right &&
+				pb.right > rb.left &&
+				pb.bottom > rb.top &&
+				pb.top < rb.bottom {
 				return true
 			}
 		}
@@ -54,7 +51,7 @@ func Day09(input []string) (solution shared.Solution[int, int]) {
 	}
 	for _, r := range rectangles {
 		if !intersectsPolyline(r) {
-			solution.Part2 = r.area
+			solution.Part2 = area(r)
 			break
 		}
 	}

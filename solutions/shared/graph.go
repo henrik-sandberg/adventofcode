@@ -42,7 +42,7 @@ type Edge struct {
 	Weight int
 }
 
-// Find the minimum spanning tree of n edges
+// Find the minimum spanning tree of n nodes
 func Kruskal(n int, edges []Edge) []Edge {
 	slices.SortFunc(edges, func(a, b Edge) int {
 		return a.Weight - b.Weight

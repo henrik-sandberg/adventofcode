@@ -15,13 +15,13 @@ func day08solve(input []string, pairs int) (solution shared.Solution[int, int]) 
 		id      int
 		x, y, z int
 	}
-	var points []point
+	points := make([]point, len(input))
 	for idx, s := range input {
 		ints := shared.IntSlice(strings.Split(s, ","))
-		points = append(points, point{
+		points[idx] = point{
 			id: idx,
 			x:  ints[0], y: ints[1], z: ints[2],
-		})
+		}
 	}
 	var edges []shared.Edge
 	for _, a := range points {
@@ -44,8 +44,9 @@ func day08solve(input []string, pairs int) (solution shared.Solution[int, int]) 
 	for c := range dsu.Components() {
 		clusterSizes = append(clusterSizes, len(c))
 	}
-	slices.Sort(clusterSizes)
-	slices.Reverse(clusterSizes)
+	slices.SortFunc(clusterSizes, func(a, b int) int {
+		return b - a
+	})
 	solution.Part1 = clusterSizes[0] * clusterSizes[1] * clusterSizes[2]
 
 	mst := shared.Kruskal(len(points), edges)
