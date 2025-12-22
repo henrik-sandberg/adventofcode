@@ -2,7 +2,6 @@ package y2025
 
 import (
 	"adventofcode/solutions/shared"
-	"slices"
 	"strconv"
 	"strings"
 )
@@ -18,6 +17,17 @@ func Day10(input []string) (solution shared.Solution[int, int]) {
 	type Pattern struct {
 		value []int
 		cost  int
+	}
+	makeCoeffs := func(buttons [][]int, targetLength int) [][]int {
+		coeffs := make([][]int, len(buttons))
+		for idx := range buttons {
+			c := make([]int, targetLength)
+			for _, i := range buttons[idx] {
+				c[i] = 1
+			}
+			coeffs[idx] = c
+		}
+		return coeffs
 	}
 	makePatterns := func(coeffs [][]int) []Pattern {
 		indices := make([]int, len(coeffs))
@@ -44,41 +54,30 @@ func Day10(input []string) (solution shared.Solution[int, int]) {
 		}
 		return out
 	}
-	part1 := func(buttons [][]int, target []int) int {
-		for k := range len(buttons) + 1 {
-			for comb := range shared.Combinations(buttons, k) {
-				work := make([]int, len(target))
-				for _, n := range slices.Concat(comb...) {
-					work[n] = (work[n] + 1) & 1
-				}
-				if slices.Equal(target, work) {
-					return k
+	findParity := func(patterns []Pattern, target []int) int {
+		for _, pattern := range patterns {
+			valid := true
+			for idx := range target {
+				if pattern.value[idx]&1 != target[idx]&1 {
+					valid = false
+					break
 				}
 			}
+			if valid {
+				return pattern.cost
+			}
 		}
-		return 0
+		return -1
 	}
-	part2 := func(buttons [][]int, target []int) int {
-		var coeffs [][]int
-		for _, button := range buttons {
-			c := make([]int, len(target))
-			for _, i := range button {
-				c[i] = 1
-			}
-			coeffs = append(coeffs, c)
+	findAddends := func(patterns []Pattern, target []int) int {
+		memo := map[string]int{
+			encode(make([]int, len(target))): 0,
 		}
-		patterns := makePatterns(coeffs)
-		memo := make(map[string]int)
 		var helper func(target []int) int
 		helper = func(target []int) int {
 			key := encode(target)
 			if v, ok := memo[key]; ok {
 				return v
-			}
-			if !slices.ContainsFunc(target, func(i int) bool {
-				return i != 0
-			}) {
-				return 0
 			}
 			ans := 1 << 60
 			for _, pattern := range patterns {
@@ -103,22 +102,29 @@ func Day10(input []string) (solution shared.Solution[int, int]) {
 		}
 		return helper(target)
 	}
-
-	for _, line := range input {
-		fs := strings.Fields(line)
-		var buttons [][]int
-		for _, s := range fs[1 : len(fs)-1] {
-			buttons = append(buttons, shared.IntSlice(strings.Split(strings.Trim(s, "()"), ",")))
+	parse := func(s string) ([]int, [][]int, []int) {
+		fs := strings.Fields(s)
+		buttons := make([][]int, len(fs)-2)
+		for idx, button := range fs[1 : len(fs)-1] {
+			button = strings.Trim(button, "()")
+			buttons[idx] = shared.IntSlice(strings.Split(button, ","))
 		}
-		lights := strings.Trim(fs[0], "[]")
-		target := make([]int, len(lights))
-		for idx, c := range lights {
+		ls := strings.Trim(fs[0], "[]")
+		lights := make([]int, len(ls))
+		for idx, c := range ls {
 			if c == '#' {
-				target[idx] = 1
+				lights[idx] = 1
 			}
 		}
-		solution.Part1 += part1(buttons, target)
-		solution.Part2 += part2(buttons, shared.IntSlice(strings.Split(strings.Trim(fs[len(fs)-1], "{}"), ",")))
+		targets := strings.Trim(fs[len(fs)-1], "{}")
+		return lights, buttons, shared.IntSlice(strings.Split(targets, ","))
+	}
+	for _, line := range input {
+		lights, buttons, target := parse(line)
+		coeffs := makeCoeffs(buttons, len(target))
+		patterns := makePatterns(coeffs)
+		solution.Part1 += findParity(patterns, lights)
+		solution.Part2 += findAddends(patterns, target)
 	}
 	return
 }
