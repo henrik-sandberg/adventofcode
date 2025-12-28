@@ -6,7 +6,7 @@ import (
 
 func Day07(input []string) (solution shared.Solution[int, int]) {
 	grid := shared.NewGrid(input)
-	var memo = make(map[complex128]int)
+	memo := make(map[complex128]int)
 	var dfs func(c complex128) int
 	dfs = func(c complex128) int {
 		if val, ok := memo[c]; ok {

@@ -6,7 +6,7 @@ import (
 )
 
 func Day04(input []string) (solution shared.Solution[int, int]) {
-	adjecent := []complex128{
+	adjacent := []complex128{
 		1, -1, 1i, -1i, 1 + 1i, 1 - 1i, -1 + 1i, -1 - 1i,
 	}
 	grid := shared.NewGrid(input)
@@ -15,7 +15,7 @@ func Day04(input []string) (solution shared.Solution[int, int]) {
 	})
 	countNeighbours := func(c complex128) int {
 		result := 0
-		for _, a := range adjecent {
+		for _, a := range adjacent {
 			if grid[c+a] == '@' {
 				result++
 			}

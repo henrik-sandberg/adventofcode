@@ -2,7 +2,6 @@ package y2021
 
 import (
 	"adventofcode/solutions/shared"
-	"maps"
 	"slices"
 	"strings"
 )
@@ -51,7 +50,7 @@ func Day05(input []string) (solution shared.Solution[int, int]) {
 			}
 		}
 		ret := 0
-		for val := range maps.Values(grid) {
+		for _, val := range grid {
 			if val > 1 {
 				ret++
 			}

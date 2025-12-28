@@ -13,7 +13,7 @@ func Day08(input []string) (solution shared.Solution[int, int]) {
 	dirs := input[0]
 	network := parseNetwork(input[2:])
 	solution.Part1 = stepsUntilTarget("AAA", "ZZZ", dirs, network)
-	paths := []int{}
+	var paths []int
 	for k := range network {
 		if strings.HasSuffix(k, "A") {
 			paths = append(paths, stepsUntilTarget(k, "Z", dirs, network))

@@ -1,6 +1,10 @@
 package shared
 
-import "math"
+import (
+	"fmt"
+	"math"
+	"math/big"
+)
 
 func Abs(i int) int {
 	if i < 0 {
@@ -68,4 +72,53 @@ func BoolToInt(b bool) int {
 		return 1
 	}
 	return 0
+}
+
+// Solves an n×(n+1) augmented matrix in-place.
+// Returns solution vector of length n.
+func GaussianElimination(mat [][]*big.Rat) ([]*big.Rat, error) {
+	n := len(mat)
+
+	zero := big.NewRat(0, 1)
+
+	for col := 0; col < n; col++ {
+		// Find pivot
+		pivot := col
+		for pivot < n && mat[pivot][col].Cmp(zero) == 0 {
+			pivot++
+		}
+		if pivot == n {
+			return nil, fmt.Errorf("singular matrix")
+		}
+
+		// Swap rows
+		mat[col], mat[pivot] = mat[pivot], mat[col]
+
+		// Normalize pivot row
+		pivotVal := new(big.Rat).Set(mat[col][col])
+		for j := col; j <= n; j++ {
+			mat[col][j].Quo(mat[col][j], pivotVal)
+		}
+
+		// Eliminate other rows
+		for i := 0; i < n; i++ {
+			if i == col {
+				continue
+			}
+			factor := new(big.Rat).Set(mat[i][col])
+			if factor.Cmp(zero) == 0 {
+				continue
+			}
+			for j := col; j <= n; j++ {
+				tmp := new(big.Rat).Mul(factor, mat[col][j])
+				mat[i][j].Sub(mat[i][j], tmp)
+			}
+		}
+	}
+
+	solution := make([]*big.Rat, n)
+	for i := range n {
+		solution[i] = mat[i][n]
+	}
+	return solution, nil
 }
