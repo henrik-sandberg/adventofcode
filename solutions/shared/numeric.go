@@ -13,6 +13,17 @@ func Abs(i int) int {
 	return i
 }
 
+func Sign(i int) int {
+	switch {
+	case i < 0:
+		return -1
+	case i > 0:
+		return 1
+	default:
+		return 0
+	}
+}
+
 func Sum(n ...int) (res int) {
 	for _, v := range n {
 		res += v
@@ -64,14 +75,6 @@ func Stddev(arr []int) float64 {
 
 func PositiveMod(i, mod int) int {
 	return (i%mod + mod) % mod
-}
-
-// Returns 1 if true, else 0
-func BoolToInt(b bool) int {
-	if b {
-		return 1
-	}
-	return 0
 }
 
 // Solves an n×(n+1) augmented matrix in-place.

@@ -24,27 +24,22 @@ func day24solve(input []string, from, to float64) (solution shared.Solution[int,
 			v: shared.IntSlice(strings.Split(tmp[1], ",")),
 		})
 	}
-	rat := func(x int) *big.Rat {
-		return big.NewRat(int64(x), 1)
-	}
 	for eqs := range shared.Combinations(equations, 2) {
-		T, err := shared.GaussianElimination([][]*big.Rat{
-			{
-				rat(eqs[0].v[0]),
-				rat(-eqs[1].v[0]),
-				rat(eqs[1].p[0] - eqs[0].p[0]),
-			},
-			{
-				rat(eqs[0].v[1]),
-				rat(-eqs[1].v[1]),
-				rat(eqs[1].p[1] - eqs[0].p[1]),
-			},
-		})
-		if err != nil {
+		A := [][]int{
+			{eqs[0].v[0], -eqs[1].v[0]},
+			{eqs[0].v[1], -eqs[1].v[1]},
+		}
+		det := A[0][0]*A[1][1] - A[0][1]*A[1][0]
+		if det == 0 {
 			continue
 		}
-		t0, _ := T[0].Float64()
-		t1, _ := T[1].Float64()
+		B := []int{
+			eqs[1].p[0] - eqs[0].p[0],
+			eqs[1].p[1] - eqs[0].p[1],
+		}
+		t0 := float64(B[0]*A[1][1]-B[1]*A[0][1]) / float64(det)
+		t1 := float64(B[1]*A[0][0]-B[0]*A[1][0]) / float64(det)
+
 		x := float64(eqs[0].p[0]) + t0*float64(eqs[0].v[0])
 		y := float64(eqs[0].p[1]) + t0*float64(eqs[0].v[1])
 		if t0 >= 0 && t1 >= 0 &&
@@ -57,6 +52,9 @@ func day24solve(input []string, from, to float64) (solution shared.Solution[int,
 		var ret [][]*big.Rat
 		dv := []int{a.v[0] - b.v[0], a.v[1] - b.v[1], a.v[2] - b.v[2]}
 		dp := []int{a.p[0] - b.p[0], a.p[1] - b.p[1], a.p[2] - b.p[2]}
+		rat := func(x int) *big.Rat {
+			return big.NewRat(int64(x), 1)
+		}
 		for i := range 3 {
 			// i = component along which we compute cross-product (X/Y/Z)
 			// j, k = other two components in cyclic order

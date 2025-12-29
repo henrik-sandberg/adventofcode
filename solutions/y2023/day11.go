@@ -15,7 +15,10 @@ func Day11(input []string) (solution shared.Solution[int, int]) {
 			if len(rowadjust) > 0 {
 				previous += rowadjust[i-1]
 			}
-			rowadjust = append(rowadjust, previous+multiplier*shared.BoolToInt(!strings.ContainsRune(row, '#')))
+			if !strings.ContainsRune(row, '#') {
+				previous += multiplier
+			}
+			rowadjust = append(rowadjust, previous)
 		}
 		var coladjust []int
 		for j := range input[0] {
@@ -30,7 +33,10 @@ func Day11(input []string) (solution shared.Solution[int, int]) {
 					break
 				}
 			}
-			coladjust = append(coladjust, previous+multiplier*shared.BoolToInt(!hasGalaxy))
+			if !hasGalaxy {
+				previous += multiplier
+			}
+			coladjust = append(coladjust, previous)
 		}
 		grid := shared.Grid{}
 		for ri, row := range input {

@@ -16,8 +16,7 @@ func Reverse(s string) string {
 func IntSlice(input []string) []int {
 	ints := make([]int, len(input))
 	for i, s := range input {
-		value, _ := strconv.Atoi(strings.TrimSpace(s))
-		ints[i] = value
+		ints[i], _ = strconv.Atoi(strings.TrimSpace(s))
 	}
 	return ints
 }

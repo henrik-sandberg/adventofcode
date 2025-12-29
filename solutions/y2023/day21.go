@@ -53,9 +53,13 @@ func (d *day21) part2(iterations int) int {
 	oddCorners := 0
 	for v := range d.bfs() {
 		evenFull += v&1 ^ 1
-		evenCorners += shared.BoolToInt(v&1 == 0 && v > 65)
+		if v&1 == 0 && v > 65 {
+			evenCorners++
+		}
 		oddFull += v & 1
-		oddCorners += shared.BoolToInt(v&1 == 1 && v > 65)
+		if v&1 == 1 && v > 65 {
+			oddCorners++
+		}
 	}
 	return (n+1)*(n+1)*oddFull + n*n*evenFull - (n+1)*oddCorners + n*evenCorners
 }

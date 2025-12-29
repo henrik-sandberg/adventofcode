@@ -21,7 +21,9 @@ func Day13(input []string) (solution shared.Solution[int, int]) {
 			miss := 0
 			for offset := 1; x-offset >= 0 && x+offset-1 < w; offset++ {
 				for ri := range h {
-					miss += shared.BoolToInt(pattern[ri][x-offset] != pattern[ri][x+offset-1])
+					if pattern[ri][x-offset] != pattern[ri][x+offset-1] {
+						miss++
+					}
 				}
 			}
 			score(miss, x)
@@ -33,7 +35,9 @@ func Day13(input []string) (solution shared.Solution[int, int]) {
 			miss := 0
 			for offset := 1; y-offset >= 0 && y+offset-1 < h; offset++ {
 				for ci := range w {
-					miss += shared.BoolToInt(pattern[y-offset][ci] != pattern[y+offset-1][ci])
+					if pattern[y-offset][ci] != pattern[y+offset-1][ci] {
+						miss++
+					}
 				}
 			}
 			score(miss, 100*y)

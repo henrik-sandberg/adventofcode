@@ -34,7 +34,9 @@ func Day04(input []string) (solution shared.Solution[int, int]) {
 			grid[a-1+1i],
 			grid[a+1+1i],
 		}
-		solution.Part2 += shared.BoolToInt(ns[0] != ns[3] && shared.Count(ns, 'M') == 2 && shared.Count(ns, 'S') == 2)
+		if ns[0] != ns[3] && shared.Count(ns, 'M') == 2 && shared.Count(ns, 'S') == 2 {
+			solution.Part2++
+		}
 	}
 	return
 }

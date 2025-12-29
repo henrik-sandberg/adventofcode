@@ -23,21 +23,11 @@ func Day05(input []string) (solution shared.Solution[int, int]) {
 			to:   point{x: to[0], y: to[1]},
 		})
 	}
-
-	sign := func(i int) int {
-		if i > 0 {
-			return 1
-		}
-		if i < 0 {
-			return -1
-		}
-		return 0
-	}
 	overlaps := func(segments []segment) int {
 		grid := map[point]int{}
 		for _, seg := range segments {
-			dx := sign(seg.to.x - seg.from.x)
-			dy := sign(seg.to.y - seg.from.y)
+			dx := shared.Sign(seg.to.x - seg.from.x)
+			dy := shared.Sign(seg.to.y - seg.from.y)
 			x, y := seg.from.x, seg.from.y
 			for {
 				p := point{x: x, y: y}
