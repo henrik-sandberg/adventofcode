@@ -52,6 +52,13 @@ func buildGraphDay12(input []string) (nodes []*node) {
 		{rd: 1, cd: 0},
 		{rd: -1, cd: 0},
 	}
+
+	// appends b to edges of a, if possible to go from a to b
+	appendValidNode := func(a *node, b *node) {
+		if a.value >= b.value-1 {
+			a.nodes = append(a.nodes, b)
+		}
+	}
 	for r_ind, row := range input {
 		for c_ind := range row {
 			currentNode := hills[point{r_ind, c_ind}]
@@ -83,11 +90,4 @@ func buildNode(r rune, p point) *node {
 		elevation = int(r - 'a')
 	}
 	return &node{value: elevation, name: name}
-}
-
-// appends b to edges of a, if possible to go from a to b
-func appendValidNode(a *node, b *node) {
-	if a.value >= b.value-1 {
-		a.nodes = append(a.nodes, b)
-	}
 }

@@ -38,14 +38,21 @@ func day10_part2(commands []string) string {
 	width := 40
 	cycle := 0
 	sprite := 1
+	char := func(cycle, sprite, width int) string {
+		if abs((cycle)%width-sprite) < 2 {
+			return "#"
+		} else {
+			return "."
+		}
+	}
 	var crt strings.Builder
 	for _, cmd := range commands {
-		crt.WriteString(getCrtChar(cycle, sprite, width))
+		crt.WriteString(char(cycle, sprite, width))
 		cycle += 1
 		if cmd == "noop" {
 			continue
 		}
-		crt.WriteString(getCrtChar(cycle, sprite, width))
+		crt.WriteString(char(cycle, sprite, width))
 		cycle += 1
 		cmdArr := strings.Split(cmd, " ")
 		val, _ := strconv.Atoi(cmdArr[1])
@@ -56,12 +63,4 @@ func day10_part2(commands []string) string {
 		res += s[i:i+width] + "\n"
 	}
 	return res
-}
-
-func getCrtChar(cycle int, sprite int, width int) string {
-	if abs((cycle)%width-sprite) < 2 {
-		return "#"
-	} else {
-		return "."
-	}
 }

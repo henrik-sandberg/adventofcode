@@ -9,30 +9,29 @@ import (
 
 func Day09(input []string) (solution shared.Solution[int, int]) {
 	solution.Part1 = solveDay09(input, 2)
-	solution.Part1 = solveDay09(input, 10)
+	solution.Part2 = solveDay09(input, 10)
 	return
 }
 
 func solveDay09(input []string, length int) int {
-	seen := []point{}
+	var path []point
 	rope := make([]point, length)
-	for _, cmd := range input {
-		cmdArr := strings.Split(cmd, " ")
-		direction := cmdArr[0]
-		distance, _ := strconv.Atoi(cmdArr[1])
-		for range distance {
+	for _, line := range input {
+		direction, distStr, _ := strings.Cut(line, " ")
+		dist, _ := strconv.Atoi(distStr)
+		for range dist {
 			rope[0].move(direction)
 			for i := 1; i < len(rope); i++ {
 				rope[i].follow(rope[i-1])
 			}
-			seen = append(seen, rope[len(rope)-1])
+			path = append(path, rope[len(rope)-1])
 		}
 	}
-	unique := map[point]bool{}
-	for _, p := range seen {
-		unique[p] = true
+	seen := make(map[point]struct{})
+	for _, p := range path {
+		seen[p] = struct{}{}
 	}
-	return len(unique)
+	return len(seen)
 }
 
 func (p *point) move(direction string) {
