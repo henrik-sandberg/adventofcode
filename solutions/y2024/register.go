@@ -4,7 +4,7 @@ import (
 	"adventofcode/solutions/shared"
 )
 
-var Solutions = map[string]func([]string) shared.Solution[any, any]{
+var Solvers = map[string]shared.Solver{
 	"01": shared.WrapSolution(Day01),
 	"02": shared.WrapSolution(Day02),
 	"03": shared.WrapSolution(Day03),
@@ -31,4 +31,3 @@ var Solutions = map[string]func([]string) shared.Solution[any, any]{
 	"24": shared.WrapSolution(Day24),
 	"25": shared.WrapSolution(Day25),
 }
-

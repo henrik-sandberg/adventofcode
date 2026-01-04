@@ -38,7 +38,7 @@ func main() {
 
 	yearStr := fmt.Sprintf("%d", *yearFlag)
 	dayStr := fmt.Sprintf("%02d", *dayFlag)
-	solver, ok := solutions.GetSolution(yearStr, dayStr)
+	solver, ok := solutions.GetSolver(yearStr, dayStr)
 	if !ok {
 		log.Fatalf("Solution for day %s in year %s not found.", dayStr, yearStr)
 	}
@@ -102,7 +102,7 @@ func solveProblemHandler(w http.ResponseWriter, r *http.Request) {
 
 	bodyReader := strings.NewReader(string(body))
 
-	solver, ok := solutions.GetSolution(year, day)
+	solver, ok := solutions.GetSolver(year, day)
 	if !ok {
 		http.Error(w, fmt.Sprintf("Solution for day %s in year %s not found.", day, year), http.StatusNotFound)
 		return
