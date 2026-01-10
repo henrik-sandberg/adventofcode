@@ -1,9 +1,8 @@
 package y2022
 
 import (
-	"sort"
-
 	"adventofcode/solutions/shared"
+	"slices"
 )
 
 type monkey struct {
@@ -43,126 +42,126 @@ func solveDay11(monkeys map[int]*monkey, rounds int, decayFunc func(int) int) in
 		}
 	}
 	insp := make([]int, len(monkeys))
-	for _, monkey := range monkeys {
-		insp = append(insp, monkey.inspections)
+	for idx, monkey := range monkeys {
+		insp[idx] = monkey.inspections
 	}
-	sort.Ints(insp)
+	slices.Sort(insp)
 	return insp[len(insp)-1] * insp[len(insp)-2]
 }
 
 func getMonkeys() map[int]*monkey {
-	monkeys := map[int]*monkey{}
-	monkeys[0] = &monkey{
-		items:   []int{76, 88, 96, 97, 58, 61, 67},
-		divisor: 3,
-		operation: func(x int) int {
-			return x * 19
+	return map[int]*monkey{
+		0: {
+			items:   []int{76, 88, 96, 97, 58, 61, 67},
+			divisor: 3,
+			operation: func(x int) int {
+				return x * 19
+			},
+			target: func(rey2022der int) int {
+				if rey2022der == 0 {
+					return 2
+				} else {
+					return 3
+				}
+			},
 		},
-		target: func(rey2022der int) int {
-			if rey2022der == 0 {
-				return 2
-			} else {
-				return 3
-			}
+		1: {
+			items:   []int{93, 71, 79, 83, 69, 70, 94, 98},
+			divisor: 11,
+			operation: func(x int) int {
+				return x + 8
+			},
+			target: func(rey2022der int) int {
+				if rey2022der == 0 {
+					return 5
+				} else {
+					return 6
+				}
+			},
+		},
+		2: {
+			items:   []int{50, 74, 67, 92, 61, 76},
+			divisor: 19,
+			operation: func(x int) int {
+				return x * 13
+			},
+			target: func(rey2022der int) int {
+				if rey2022der == 0 {
+					return 3
+				} else {
+					return 1
+				}
+			},
+		},
+		3: {
+			items:   []int{76, 92},
+			divisor: 5,
+			operation: func(x int) int {
+				return x + 6
+			},
+			target: func(rey2022der int) int {
+				if rey2022der == 0 {
+					return 1
+				} else {
+					return 6
+				}
+			},
+		},
+		4: {
+			items:   []int{74, 94, 55, 87, 62},
+			divisor: 2,
+			operation: func(x int) int {
+				return x + 5
+			},
+			target: func(rey2022der int) int {
+				if rey2022der == 0 {
+					return 2
+				} else {
+					return 0
+				}
+			},
+		},
+		5: {
+			items:   []int{59, 62, 53, 62},
+			divisor: 7,
+			operation: func(x int) int {
+				return x * x
+			},
+			target: func(rey2022der int) int {
+				if rey2022der == 0 {
+					return 4
+				} else {
+					return 7
+				}
+			},
+		},
+		6: {
+			items:   []int{62},
+			divisor: 17,
+			operation: func(x int) int {
+				return x + 2
+			},
+			target: func(rey2022der int) int {
+				if rey2022der == 0 {
+					return 5
+				} else {
+					return 7
+				}
+			},
+		},
+		7: {
+			items:   []int{85, 54, 53},
+			divisor: 13,
+			operation: func(x int) int {
+				return x + 3
+			},
+			target: func(rey2022der int) int {
+				if rey2022der == 0 {
+					return 4
+				} else {
+					return 0
+				}
+			},
 		},
 	}
-	monkeys[1] = &monkey{
-		items:   []int{93, 71, 79, 83, 69, 70, 94, 98},
-		divisor: 11,
-		operation: func(x int) int {
-			return x + 8
-		},
-		target: func(rey2022der int) int {
-			if rey2022der == 0 {
-				return 5
-			} else {
-				return 6
-			}
-		},
-	}
-	monkeys[2] = &monkey{
-		items:   []int{50, 74, 67, 92, 61, 76},
-		divisor: 19,
-		operation: func(x int) int {
-			return x * 13
-		},
-		target: func(rey2022der int) int {
-			if rey2022der == 0 {
-				return 3
-			} else {
-				return 1
-			}
-		},
-	}
-	monkeys[3] = &monkey{
-		items:   []int{76, 92},
-		divisor: 5,
-		operation: func(x int) int {
-			return x + 6
-		},
-		target: func(rey2022der int) int {
-			if rey2022der == 0 {
-				return 1
-			} else {
-				return 6
-			}
-		},
-	}
-	monkeys[4] = &monkey{
-		items:   []int{74, 94, 55, 87, 62},
-		divisor: 2,
-		operation: func(x int) int {
-			return x + 5
-		},
-		target: func(rey2022der int) int {
-			if rey2022der == 0 {
-				return 2
-			} else {
-				return 0
-			}
-		},
-	}
-	monkeys[5] = &monkey{
-		items:   []int{59, 62, 53, 62},
-		divisor: 7,
-		operation: func(x int) int {
-			return x * x
-		},
-		target: func(rey2022der int) int {
-			if rey2022der == 0 {
-				return 4
-			} else {
-				return 7
-			}
-		},
-	}
-	monkeys[6] = &monkey{
-		items:   []int{62},
-		divisor: 17,
-		operation: func(x int) int {
-			return x + 2
-		},
-		target: func(rey2022der int) int {
-			if rey2022der == 0 {
-				return 5
-			} else {
-				return 7
-			}
-		},
-	}
-	monkeys[7] = &monkey{
-		items:   []int{85, 54, 53},
-		divisor: 13,
-		operation: func(x int) int {
-			return x + 3
-		},
-		target: func(rey2022der int) int {
-			if rey2022der == 0 {
-				return 4
-			} else {
-				return 0
-			}
-		},
-	}
-	return monkeys
 }
