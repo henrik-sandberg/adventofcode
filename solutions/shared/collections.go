@@ -12,13 +12,14 @@ func Counts[T comparable](s []T) map[T]int {
 }
 
 // Returns the count of e in s
-func Count[T comparable](s []T, e T) (res int) {
+func Count[T comparable](s []T, e T) int {
+	res := 0
 	for _, v := range s {
 		if v == e {
 			res++
 		}
 	}
-	return
+	return res
 }
 
 // Returns the intersect of first and second as a new slice

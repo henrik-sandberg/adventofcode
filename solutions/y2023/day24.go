@@ -78,10 +78,7 @@ func day24solve(input []string, from, to float64) (solution shared.Solution[int,
 	}
 
 	mat := append(generateCrossProductRows(equations[0], equations[1]), generateCrossProductRows(equations[0], equations[2])...)
-	solved, err := shared.GaussianElimination(mat)
-	if err != nil {
-		panic(err)
-	}
+	solved := shared.GaussianElimination(mat)
 	sum := new(big.Rat)
 	sum.Add(solved[0], solved[1])
 	sum.Add(sum, solved[2])

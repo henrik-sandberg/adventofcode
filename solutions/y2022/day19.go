@@ -18,25 +18,14 @@ func Day19(input []string) (solution shared.Solution[int, int]) {
 		}
 		blueprints[i] = bp
 	}
-	solution.Part1 = day19_part1(blueprints)
-	solution.Part2 = day19_part2(blueprints)
-	return
-}
-
-func day19_part1(blueprints []blueprint) int {
-	result := 0
 	for _, bp := range blueprints {
-		result += bp.id * bp.calculateHighestGeodeLevel(24)
+		solution.Part1 += bp.id * bp.calculateHighestGeodeLevel(24)
 	}
-	return result
-}
-
-func day19_part2(blueprints []blueprint) int {
-	result := 1
+	solution.Part2 = 1
 	for _, bp := range blueprints[:3] {
-		result *= bp.calculateHighestGeodeLevel(32)
+		solution.Part2 *= bp.calculateHighestGeodeLevel(32)
 	}
-	return result
+	return
 }
 
 type blueprint struct {

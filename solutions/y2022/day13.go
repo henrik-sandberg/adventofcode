@@ -10,27 +10,46 @@ import (
 )
 
 func Day13(input []string) (solution shared.Solution[int, int]) {
-	solution.Part1 = day13_part1(input)
-	solution.Part2 = day13_part2(input)
-	return
-}
-
-func day13_part1(input []string) (result int) {
+	var compare func(left []any, right []any) int
+	compare = func(left []any, right []any) int {
+		for i := 0; i < len(left) && i < len(right); i++ {
+			l := left[i]
+			r := right[i]
+			typeLeft := reflect.TypeOf(l).Kind()
+			typeRight := reflect.TypeOf(r).Kind()
+			if typeLeft == typeRight {
+				if typeLeft == reflect.Float64 {
+					if res := int(l.(float64) - r.(float64)); res != 0 {
+						return res
+					}
+				} else if res := compare(l.([]any), r.([]any)); res != 0 {
+					return res
+				}
+			} else {
+				var res int
+				if typeLeft == reflect.Float64 {
+					res = compare([]any{l.(float64)}, r.([]any))
+				} else {
+					res = compare(l.([]any), []any{r.(float64)})
+				}
+				if res != 0 {
+					return res
+				}
+			}
+		}
+		return len(left) - len(right)
+	}
 	for i := 0; i < len(input); i = i + 3 {
 		var left []any
 		var right []any
 		json.Unmarshal([]byte(input[i]), &left)
 		json.Unmarshal([]byte(input[i+1]), &right)
-		if day13_compare(left, right) < 0 {
+		if compare(left, right) < 0 {
 			index := i/3 + 1
-			result += index
+			solution.Part1 += index
 		}
 	}
-	return
-}
-
-func day13_part2(input []string) int {
-	packets := [][]any{}
+	var packets [][]any
 	for _, line := range input {
 		if line != "" {
 			var packet []any
@@ -42,46 +61,18 @@ func day13_part2(input []string) int {
 	packets = append(packets, dividerPackets...)
 
 	sort.Slice(packets, func(i, j int) bool {
-		return day13_compare(packets[i], packets[j]) < 0
+		return compare(packets[i], packets[j]) < 0
 	})
 
-	strings := []string{}
-	for _, p := range packets {
-		strings = append(strings, fmt.Sprint(p))
+	strings := make([]string, len(packets))
+	for i, p := range packets {
+		strings[i] = fmt.Sprint(p)
 	}
 
-	indexes := []int{}
-	for _, dp := range dividerPackets {
-		indexes = append(indexes, slices.Index(strings, fmt.Sprint(dp))+1)
+	indexes := make([]int, len(dividerPackets))
+	for i, dp := range dividerPackets {
+		indexes[i] = slices.Index(strings, fmt.Sprint(dp)) + 1
 	}
-
-	return multiply(indexes...)
-}
-
-func day13_compare(left []any, right []any) int {
-	for i := 0; i < len(left) && i < len(right); i++ {
-		l := left[i]
-		r := right[i]
-		typeLeft := reflect.TypeOf(l).Kind()
-		if typeLeft == reflect.TypeOf(r).Kind() {
-			if typeLeft == reflect.Float64 {
-				if res := compareFloat64s(l.(float64), r.(float64)); res != 0 {
-					return res
-				}
-			} else if res := day13_compare(l.([]any), r.([]any)); res != 0 {
-				return res
-			}
-		} else {
-			var res int
-			if typeLeft == reflect.Float64 {
-				res = day13_compare([]any{l.(float64)}, r.([]any))
-			} else {
-				res = day13_compare(l.([]any), []any{r.(float64)})
-			}
-			if res != 0 {
-				return res
-			}
-		}
-	}
-	return compareInts(len(left), len(right))
+	solution.Part2 = shared.Product(indexes...)
+	return
 }

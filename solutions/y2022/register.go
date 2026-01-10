@@ -23,4 +23,5 @@ var Solvers = map[string]shared.Solver{
 	"17": shared.WrapSolution(Day17),
 	"18": shared.WrapSolution(Day18),
 	"19": shared.WrapSolution(Day19),
+	"20": shared.WrapSolution(Day20),
 }

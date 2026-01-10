@@ -1,7 +1,6 @@
 package shared
 
 import (
-	"fmt"
 	"math"
 	"math/big"
 )
@@ -24,11 +23,12 @@ func Sign(i int) int {
 	}
 }
 
-func Sum(n ...int) (res int) {
+func Sum(n ...int) int {
+	sum := 0
 	for _, v := range n {
-		res += v
+		sum += v
 	}
-	return res
+	return sum
 }
 
 func Product(n ...int) int {
@@ -79,7 +79,7 @@ func PositiveMod(i, mod int) int {
 
 // Solves an n×(n+1) augmented matrix in-place.
 // Returns solution vector of length n.
-func GaussianElimination(mat [][]*big.Rat) ([]*big.Rat, error) {
+func GaussianElimination(mat [][]*big.Rat) []*big.Rat {
 	n := len(mat)
 
 	zero := big.NewRat(0, 1)
@@ -91,7 +91,7 @@ func GaussianElimination(mat [][]*big.Rat) ([]*big.Rat, error) {
 			pivot++
 		}
 		if pivot == n {
-			return nil, fmt.Errorf("singular matrix")
+			return nil
 		}
 
 		// Swap rows
@@ -123,5 +123,5 @@ func GaussianElimination(mat [][]*big.Rat) ([]*big.Rat, error) {
 	for i := range n {
 		solution[i] = mat[i][n]
 	}
-	return solution, nil
+	return solution
 }

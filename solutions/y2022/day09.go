@@ -48,7 +48,7 @@ func (p *point) move(direction string) {
 }
 
 func (p *point) follow(head point) {
-	if abs(head.x-p.x) > 1 || abs(head.y-p.y) > 1 {
+	if shared.Abs(head.x-p.x) > 1 || shared.Abs(head.y-p.y) > 1 {
 		if head.x > p.x {
 			p.x += 1
 		} else if head.x < p.x {

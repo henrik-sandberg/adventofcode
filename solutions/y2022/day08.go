@@ -50,7 +50,13 @@ func day08_part1(forest [][]int) int {
 			}
 		}
 	}
-	return sum(visible)
+	sum := 0
+	for _, row := range visible {
+		for _, cell := range row {
+			sum += cell
+		}
+	}
+	return sum
 }
 
 func day08_part2(forest [][]int) int {

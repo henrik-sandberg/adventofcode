@@ -39,7 +39,7 @@ func day10_part2(commands []string) string {
 	cycle := 0
 	sprite := 1
 	char := func(cycle, sprite, width int) string {
-		if abs((cycle)%width-sprite) < 2 {
+		if shared.Abs(cycle%width-sprite) < 2 {
 			return "#"
 		} else {
 			return "."
